@@ -8,10 +8,10 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @icon         https://przemek54.github.io/an-easy-world/aew-icon.png
+// @icon         https://przemek54.github.io/an-easy-world/assets/aew-icon.png
 // @license      GNU GPLv3
-// @downloadURL  https://przemek54.github.io/an-easy-world/AnEasyWorld.user.js
-// @updateURL    https://przemek54.github.io/an-easy-world/AnEasyWorld.user.js
+// @downloadURL  https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js
+// @updateURL    https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js
 // @require      https://miraclewhips.dev/geoguessr-event-framework/geoguessr-event-framework.min.js
 // ==/UserScript==
 
@@ -19,6 +19,7 @@
 const locationsSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=0&single=true&output=tsv';
 const metasSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv';
 const flagiconsUrl = 'https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css';
+const countryDataUrl = 'https://przemek54.github.io/an-easy-world/data/country-data.json';
 
 // Run
 GeoGuessrEventFramework.init().then((GEF) => {
@@ -379,7 +380,7 @@ function runScript(GEF) {
         // Fetch the JSON file
         GM_xmlhttpRequest({
             method: 'GET',
-            url: 'https://przemek54.github.io/an-easy-world/country-data.json',
+            url: countryDataUrl,
             onload: function(response) {
                 countryData = JSON.parse(response.responseText);
             },
