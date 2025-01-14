@@ -1,16 +1,17 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      1.0.5
-// @description  Display tips on An Easy World, fetched from the database
+// @version      0.1.0
+// @description  Display tips on An Easy World
 // @author       54
 // @match        https://www.geoguessr.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @icon         https://przemek54.github.io/an-easy-world/aew-icon.png
 // @license      GNU GPLv3
-// @downloadURL  https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.user.js
-// @updateURL    https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.meta.js
+// @downloadURL  https://przemek54.github.io/an-easy-world/AnEasyWorld.user.js
+// @updateURL    https://przemek54.github.io/an-easy-world/AnEasyWorld.user.js
 // @require      https://miraclewhips.dev/geoguessr-event-framework/geoguessr-event-framework.min.js
 // ==/UserScript==
 
