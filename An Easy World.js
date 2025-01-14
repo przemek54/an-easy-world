@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      1.0.4
+// @version      1.0.5
 // @description  Display tips on An Easy World, fetched from the database
 // @author       54
 // @match        https://www.geoguessr.com/*
@@ -9,8 +9,9 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @license      GNU GPLv3
-// @downloadURL https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.user.js
-// @updateURL https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.meta.js
+// @downloadURL  https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.user.js
+// @updateURL    https://update.greasyfork.org/scripts/508765/An%20Easy%20World%3A%20Tips.meta.js
+// @require      https://miraclewhips.dev/geoguessr-event-framework/geoguessr-event-framework.min.js
 // ==/UserScript==
 
 // URLs for Google Sheets
@@ -18,126 +19,75 @@ const locationsSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQcls
 const metasSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv';
 const flagiconsUrl = 'https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css';
 
+// Run
+GeoGuessrEventFramework.init().then((GEF) => {
+    runScript(GEF);
+});
+
 // Main logic for the script
-function runScript() {
+function runScript(GEF) {
 
     //// STARTING VARIABLES
     let globalCoordinates = {
         lat: 0,
         lng: 0
     };
-    let revealMode = false;
     let countryData = {};
     let errorDisplayed = false; // Global flag to indicate if an error message is displayed
+    let isHintsButtonVisible = false; // Flag to track the visibility state of the hintsButton
+
+    //// INITIALIZING / HIDING
+    // Check if the current URL matches the game URL pattern
+    function isGameURL() {
+        return window.location.href.includes('/game/');
+    }
+
+    // Hide UI elements
+    function hideUI() {
+        if (!isHintsButtonVisible) return; // Prevent repeated calls
+        isHintsButtonVisible = false; // Update the flag
+    
+        setTimeout(() => {
+            if (window.hintsContainer) {
+                window.hintsButton.classList.add('slide-up');
+                window.hintsContainer.style.display = 'none';
+                setTimeout(() => {
+                    window.hintsContainer.style.display = 'none';
+                    window.hintsContainer.classList.remove('slide-up');
+                }, 300); // Match the duration of the slide-up animation
+            }
+            if (window.hintsButton) {
+                window.hintsButton.style.display = 'block'; // Ensure it's visible before animating
+                window.hintsButton.classList.add('slide-up');
+                setTimeout(() => {
+                    window.hintsButton.style.display = 'none';
+                    window.hintsButton.classList.remove('slide-up');
+                }, 300); // Match the duration of the slide-up animation
+            }
+        }, 1000); // 1-second delay
+    }
+
+    // Show UI elements
+    function showUI() {
+        if (isHintsButtonVisible) return; // Prevent repeated calls
+        isHintsButtonVisible = true; // Update the flag
+    
+        setTimeout(() => {
+            if (window.hintsButton) {
+                hintsButton.innerHTML = 'Show Hints';
+                window.hintsButton.style.display = 'block'; // Ensure it's visible before animating
+                window.hintsButton.classList.remove('slide-up');
+                window.hintsButton.classList.add('slide-down');
+                setTimeout(() => {
+                    window.hintsButton.classList.remove('slide-down');
+                }, 300); // Match the duration of the slide-down animation
+            }
+        }, 1000); // 1-second delay
+    }
 
     //// STYLE ELEMENTS
-    // Basic UI
-    function setupHintsUI() {
-        // Create and style the "Hints" button
-        const hintsButton = document.createElement('button');
-        hintsButton.innerHTML = 'Show Hints';
-        hintsButton.style.fontStyle = 'italic';
-        hintsButton.style.fontSize = '18px';
-        hintsButton.style.color = 'white';
-        hintsButton.style.fontWeight = '700';
-        hintsButton.style.position = 'absolute';
-        hintsButton.style.top = '10px';
-        hintsButton.style.left = '10px';
-        hintsButton.style.background = 'linear-gradient(180deg, rgba(161,155,217,.6) 0%, rgba(161,155,217,0) 50%, rgba(161,155,217,0) 50%), var(--ds-color-purple-80)';
-        hintsButton.style.border = 'none';
-        hintsButton.style.padding = '10px';
-        hintsButton.style.cursor = 'pointer';
-        hintsButton.style.zIndex = '10000';
-        hintsButton.style.borderRadius = '8px';
-    
-        // Create and style the hints container
-        const hintsContainer = document.createElement('div');
-        hintsContainer.style.position = 'absolute';
-        hintsContainer.style.top = '55px'; // Adjust this value to position the container lower
-        hintsContainer.style.left = '10px';
-        hintsContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        hintsContainer.style.color = 'white';
-        hintsContainer.style.padding = '10px';
-        hintsContainer.style.display = 'none'; // Start hidden
-        hintsContainer.style.zIndex = '10000';
-        hintsContainer.style.width = '300px'; // Set width to prevent shrinking
-        hintsContainer.style.maxHeight = '400px';
-        hintsContainer.style.overflowY = 'auto'; // Allow scrolling if content is too large
-        hintsContainer.classList.add('slide-up'); // Add initial class for sliding up
-
-        // Create the slider toggle for "Reveal Info"
-        const revealInfoContainer = document.createElement('div');
-        revealInfoContainer.style.display = 'flex'; // Use flexbox for layout
-        revealInfoContainer.style.alignItems = 'center'; // Center items vertically
-        revealInfoContainer.style.marginBottom = '10px'; // Add some space below the slider
-
-        const revealInfoText = document.createElement('div');
-        revealInfoText.innerHTML = '<b><i>REVEAL INFO</i></b>';
-        revealInfoText.style.fontSize = '16px';
-        revealInfoText.style.marginRight = '10px';
-
-        const revealInfoLabel = document.createElement('label');
-        revealInfoLabel.className = 'switch';
-
-        const revealInfoInput = document.createElement('input');
-        revealInfoInput.type = 'checkbox';
-
-        const revealInfoSlider = document.createElement('span');
-        revealInfoSlider.className = 'slider';
-
-        revealInfoLabel.appendChild(revealInfoInput);
-        revealInfoLabel.appendChild(revealInfoSlider);
-        revealInfoContainer.appendChild(revealInfoText);
-        revealInfoContainer.appendChild(revealInfoLabel);
-
-        // Append the slider to the hints container
-        hintsContainer.appendChild(revealInfoContainer);
-
-        // Create a content section to hold the metas
-        const hintsContent = document.createElement('div');
-        hintsContent.style.marginTop = '10px'; // Add space for the carousel controls
-        hintsContent.style.display = 'flex';
-        hintsContent.style.alignItems = 'center';
-        hintsContent.style.justifyContent = 'center';
-        hintsContent.style.height = '100%'; // Ensure the container takes full height
-        hintsContent.style.textAlign = 'center'; // Center text horizontally
-        hintsContent.innerHTML = '<b><i>LOADING...</i></b>'; // Initial loading message
-        hintsContainer.appendChild(hintsContent); // Append content section to the container
-
-        // Append the button and hints container to the body
-        document.body.appendChild(hintsButton);
-        document.body.appendChild(hintsContainer);
-
-        // Store references for later use
-        window.hintsContainer = hintsContainer;
-        window.hintsContent = hintsContent; // Reference for metas content
-
-        // Toggle hints container visibility
-        hintsButton.addEventListener('click', () => {
-            if (hintsContainer.style.display === 'none') {
-                hintsContainer.style.display = 'block';
-                hintsContainer.classList.remove('slide-up');
-                hintsContainer.classList.add('slide-down');
-                hintsButton.textContent = 'Hide Hints';
-            } else {
-                hintsContainer.classList.remove('slide-down');
-                hintsContainer.classList.add('slide-up');
-                setTimeout(() => {
-                    hintsContainer.style.display = 'none';
-                }, 300); // Match the duration of the slide-up animation
-                hintsButton.textContent = 'Show Hints';
-            }
-        });
-
-        // Close the modal if the hints container is clicked
-        hintsContainer.addEventListener('click', () => {
-            const modal = document.getElementById('imageModal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none'; // Close the modal if it's open
-            }
-        });
-
-        // Add CSS styles for the sliding animation
+    // Adding style
+    function addStyle() {
         const style = document.createElement('style');
         style.textContent = `
             .slide-up {
@@ -166,114 +116,6 @@ function runScript() {
                     opacity: 1;
                 }
             }
-        `;
-        document.head.appendChild(style);
-    
-        // Toggle the mode when the slider is changed
-        revealInfoInput.addEventListener('change', () => {
-            // Check if an error message is displayed
-            if (errorDisplayed) {
-                return; // Skip refreshing metas if an error message is displayed
-            }
-        
-            // Refresh the metas to reflect the new mode
-            if (window.currentLevel) {
-                showMetasByLevel(window.currentLevel, false); // Pass false to not reset the index
-                showMeta(window.currentIndex); // Show the same meta
-            } else {
-                displayMetas(window.currentMetas);
-                showMeta(window.currentIndex); // Show the same meta
-            }
-        });
-    
-        // Store the input reference for later use
-        window.revealInfoInput = revealInfoInput;
-        window.currentIndex = 0; // Initialize the global currentIndex
-    }
-
-    // Loading CSS style for flag functionality
-    function injectCSS(url) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = url;
-        document.head.appendChild(link);
-
-        // Fetch the JSON file
-        GM_xmlhttpRequest({
-            method: 'GET',
-            url: 'https://przemek54.github.io/an-easy-world/country-data.json',
-            onload: function(response) {
-                countryData = JSON.parse(response.responseText);
-            },
-            onerror: function(error) {
-                console.error('Error fetching flags.json:', error);
-            }
-        });
-    }
-
-    // Tag colors
-    const tagColors = {
-        'Signs': '#f6b10f',
-        'Road': '#f9f536',
-        'Landscape': '#63d754',
-        'Poles' : '#b0b0b0',
-        'Agriculture' : '#bfbd5d',
-        'Vegetation' : '#177620',
-        'Language' : '#bf4075',
-        'Camera' : '#000000',
-        'Miscellaneous' : '#9026de',
-        'Plates' : '#ffffff',
-        'Shields' : '#b0d0b9',
-        'Markers' : '#136ca8',
-        'Bollards' : '#da4c14',
-        'Guardrails' : '#6fafbe',
-        'Stickers' : '#0b4fff',
-        'Chevrons' : '#f399e8',
-        'Soil' : '#9f7e27',
-        'Numbers' : '#bedff6',
-        'Flags' : '#792424',
-        'Lamps & lights' : '#feffde',
-        'Vehicles' : '#570d07',
-        'Car' : '#ef1818',
-        'Architecture' : '#57351a',
-        'Brands' : '#4d2380',
-        'People' : '#ffc8aa',
-        'Weather' : '#73dcfc',
-        'Urbanism' : '#1e3d6b',
-        'Trekker' : '#4c5c29',
-        'Coverage' : '#50e6c0',
-        'Status' : '#ffc3c3',
-        'Fences & walls' : '#ffe5a0'        
-    };
-
-    // Modal for enlarging images
-    function addModal() {
-        // Create modal container
-        const modal = document.createElement('div');
-        modal.id = 'imageModal';
-        modal.className = 'modal';
-    
-        // Create close button
-        const closeBtn = document.createElement('span');
-        closeBtn.className = 'close';
-        closeBtn.innerHTML = '&times;';
-    
-        // Create modal image
-        const modalImg = document.createElement('img');
-        modalImg.className = 'modal-content';
-        modalImg.id = 'modalImage';
-    
-        // Append elements to modal
-        modal.appendChild(closeBtn);
-        modal.appendChild(modalImg);
-    
-        // Append modal to body
-        document.body.appendChild(modal);
-    
-        // Add CSS styles for the modal
-        const style = document.createElement('style');
-        style.textContent = `
             .modal {
                 display: none; /* Hidden by default */
                 position: fixed;
@@ -367,22 +209,236 @@ function runScript() {
         document.head.appendChild(style);
     }
 
-    // Checking the map name
-    function checkMap() {
-        let mapNameElement = document.querySelector('div.status_value__w_Nh0');
+    // Modal for enlarging images
+    function addModal() {
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.id = 'imageModal';
+        modal.className = 'modal';
 
-        if (mapNameElement) {
-            let mapName = mapNameElement.textContent.trim();
-            if (mapName === 'An Easy World (alpha)') {
-                console.log("Correct map! Running script...");
-                setupHintsUI();
-                addModal();
+        // Create close button
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'close';
+        closeBtn.innerHTML = '&times;';
+
+        // Create modal image
+        const modalImg = document.createElement('img');
+        modalImg.className = 'modal-content';
+        modalImg.id = 'modalImage';
+
+        // Append elements to modal
+        modal.appendChild(closeBtn);
+        modal.appendChild(modalImg);
+
+        // Append modal to body
+        document.body.appendChild(modal);
+    }
+
+    // UI
+    function setupHintsUI() {
+        addStyle();
+        addModal();
+
+        // Create and style the "Hints" button
+        const hintsButton = document.createElement('button');
+        hintsButton.innerHTML = 'Show Hints';
+        hintsButton.style.fontStyle = 'italic';
+        hintsButton.style.fontSize = '18px';
+        hintsButton.style.color = 'white';
+        hintsButton.style.fontWeight = '700';
+        hintsButton.style.position = 'absolute';
+        hintsButton.style.top = '10px';
+        hintsButton.style.left = '10px';
+        hintsButton.style.background = 'linear-gradient(180deg, rgba(161,155,217,.6) 0%, rgba(161,155,217,0) 50%, rgba(161,155,217,0) 50%), var(--ds-color-purple-80)';
+        hintsButton.style.border = 'none';
+        hintsButton.style.padding = '10px';
+        hintsButton.style.cursor = 'pointer';
+        hintsButton.style.zIndex = '10000';
+        hintsButton.style.borderRadius = '8px';
+        hintsButton.style.display = 'none';
+
+        // Create and style the hints container
+        const hintsContainer = document.createElement('div');
+        hintsContainer.style.position = 'absolute';
+        hintsContainer.style.top = '55px'; // Adjust this value to position the container lower
+        hintsContainer.style.left = '10px';
+        hintsContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        hintsContainer.style.color = 'white';
+        hintsContainer.style.padding = '10px';
+        hintsContainer.style.display = 'none'; // Start hidden
+        hintsContainer.style.zIndex = '10000';
+        hintsContainer.style.width = '300px'; // Set width to prevent shrinking
+        hintsContainer.style.maxHeight = '400px';
+        hintsContainer.style.overflowY = 'auto'; // Allow scrolling if content is too large
+        hintsContainer.classList.add('slide-up'); // Add initial class for sliding up
+
+        // Create the slider toggle for "Reveal Info"
+        const revealInfoContainer = document.createElement('div');
+        revealInfoContainer.style.display = 'flex'; // Use flexbox for layout
+        revealInfoContainer.style.alignItems = 'center'; // Center items vertically
+        revealInfoContainer.style.marginBottom = '10px'; // Add some space below the slider
+
+        const revealInfoText = document.createElement('div');
+        revealInfoText.innerHTML = '<b><i>REVEAL INFO</i></b>';
+        revealInfoText.style.fontSize = '16px';
+        revealInfoText.style.marginRight = '10px';
+
+        const revealInfoLabel = document.createElement('label');
+        revealInfoLabel.className = 'switch';
+
+        const revealInfoInput = document.createElement('input');
+        revealInfoInput.type = 'checkbox';
+
+        const revealInfoSlider = document.createElement('span');
+        revealInfoSlider.className = 'slider';
+
+        revealInfoLabel.appendChild(revealInfoInput);
+        revealInfoLabel.appendChild(revealInfoSlider);
+        revealInfoContainer.appendChild(revealInfoText);
+        revealInfoContainer.appendChild(revealInfoLabel);
+
+        // Append the slider to the hints container
+        hintsContainer.appendChild(revealInfoContainer);
+
+        // Create a content section to hold the metas
+        const hintsContent = document.createElement('div');
+        hintsContent.style.marginTop = '10px'; // Add space for the carousel controls
+        hintsContent.style.display = 'flex';
+        hintsContent.style.alignItems = 'center';
+        hintsContent.style.justifyContent = 'center';
+        hintsContent.style.height = '100%'; // Ensure the container takes full height
+        hintsContent.style.textAlign = 'center'; // Center text horizontally
+        hintsContent.innerHTML = '<b><i>LOADING...</i></b>'; // Initial loading message
+        hintsContainer.appendChild(hintsContent); // Append content section to the container
+
+        // Append the button and hints container to the body
+        document.body.appendChild(hintsButton);
+        window.hintsButton = hintsButton;
+        document.body.appendChild(hintsContainer);
+
+        // Store references for later use
+        window.hintsContainer = hintsContainer;
+        window.hintsContent = hintsContent; // Reference for metas content
+
+        // Toggle hints container visibility
+        hintsButton.addEventListener('click', () => {
+            if (hintsContainer.style.display === 'none') {
+                hintsContainer.style.display = 'block';
+                hintsContainer.classList.remove('slide-up');
+                hintsContainer.classList.add('slide-down');
+                hintsButton.textContent = 'Hide Hints';
             } else {
-                console.log("This script only works for the map 'An Easy World (alpha)'.");
+                hintsContainer.classList.remove('slide-down');
+                hintsContainer.classList.add('slide-up');
+                setTimeout(() => {
+                    hintsContainer.style.display = 'none';
+                }, 300); // Match the duration of the slide-up animation
+                hintsButton.textContent = 'Show Hints';
             }
+        });
+
+        // Close the modal if the hints container is clicked
+        hintsContainer.addEventListener('click', () => {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none'; // Close the modal if it's open
+            }
+        });
+
+        // Toggle the mode when the slider is changed
+        revealInfoInput.addEventListener('change', () => {
+            // Check if an error message is displayed
+            if (errorDisplayed) {
+                return; // Skip refreshing metas if an error message is displayed
+            }
+
+            // Refresh the metas to reflect the new mode
+            if (window.currentLevel) {
+                showMetasByLevel(window.currentLevel, false); // Pass false to not reset the index
+                showMeta(window.currentIndex); // Show the same meta
+            } else {
+                displayMetas(window.currentMetas);
+                showMeta(window.currentIndex); // Show the same meta
+            }
+        });
+
+        // Store the input reference for later use
+        window.revealInfoInput = revealInfoInput;
+        window.currentIndex = 0; // Initialize the global currentIndex
+    }
+
+    // Loading CSS style for flag functionality
+    function injectCSS(url) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = url;
+        document.head.appendChild(link);
+
+        // Fetch the JSON file
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url: 'https://przemek54.github.io/an-easy-world/country-data.json',
+            onload: function(response) {
+                countryData = JSON.parse(response.responseText);
+            },
+            onerror: function(error) {
+                console.error('Error fetching flags.json:', error);
+            }
+        });
+    }
+
+    // Tag colors
+    const tagColors = {
+        'Signs': '#f6b10f',
+        'Road': '#f9f536',
+        'Landscape': '#63d754',
+        'Poles' : '#b0b0b0',
+        'Agriculture' : '#bfbd5d',
+        'Vegetation' : '#177620',
+        'Language' : '#bf4075',
+        'Camera' : '#000000',
+        'Miscellaneous' : '#9026de',
+        'Plates' : '#ffffff',
+        'Shields' : '#b0d0b9',
+        'Markers' : '#136ca8',
+        'Bollards' : '#da4c14',
+        'Guardrails' : '#6fafbe',
+        'Stickers' : '#0b4fff',
+        'Chevrons' : '#f399e8',
+        'Soil' : '#9f7e27',
+        'Numbers' : '#bedff6',
+        'Symbols' : '#eb2ec1',
+        'Lamps & lights' : '#feffde',
+        'Vehicles' : '#570d07',
+        'Car' : '#ef1818',
+        'Architecture' : '#57351a',
+        'Brands' : '#4d2380',
+        'People' : '#ffc8aa',
+        'Weather' : '#73dcfc',
+        'Urbanism' : '#1e3d6b',
+        'Trekker' : '#4c5c29',
+        'Coverage' : '#50e6c0',
+        'Status' : '#ffc3c3',
+        'Fences & walls' : '#ffe5a0'
+    };
+
+    // Checking the map name
+    function checkMap(GEF) {
+        if (isGameURL()){
+            setTimeout(() => {
+                const mapName = GEF.state.map.name;
+        
+                if (mapName === 'An Easy World (alpha)') {
+                    console.log("Correct map! Running script...");
+                    showUI();
+                } else {
+                    console.log("This script only works for the map 'An Easy World (alpha)'.");
+                    hideUI();
+                }
+            }, 1000); // short delay
         } else {
-            console.log("Could not find the map name element. Retrying...");
-            setTimeout(checkMap, 1000);
+            hideUI();
         }
     }
 
@@ -457,7 +513,7 @@ function runScript() {
                         }
                     } catch (error) {
                         console.error("Error fetching coordinates:", error);
-                        displayError("Error fetching coordinates.");
+                        displayError("Error fetching coordinates. Try refreshing the page.");
                     }
                 });
             }
@@ -467,7 +523,7 @@ function runScript() {
         // Set a timeout to display an error if the expected URL isn't intercepted within 5 seconds
         setTimeout(() => {
             if (!urlIntercepted) {
-                displayError("Couldn't get location.");
+                displayError("Couldn't get location. Try refreshing the page.");
             }
         }, 5000);
     }
@@ -565,7 +621,7 @@ function runScript() {
             onload: function(response) {
                 let metasRows = parseTSV(response.responseText);
                 let metasToDisplay = [];
-    
+
                 // Loop through each Meta ID and match it with the rows in the metas sheet
                 metaIds.forEach(metaId => {
                     metasRows.forEach(row => {
@@ -582,7 +638,7 @@ function runScript() {
                         }
                     });
                 });
-    
+
                 displayMetas(metasToDisplay);
             },
             onerror: function(error) {
@@ -598,26 +654,12 @@ function runScript() {
     }
 
     // Detect when the round is over
-    function observeRoundChange() {
-        let currentRoundText = null; // Store the current round text to detect changes
-
-        const observer = new MutationObserver(() => {
-            const roundNumberElement = document.querySelector('div[data-qa="round-number"] .status_value__w_Nh0');
-
-            if (roundNumberElement) {
-                const newRoundText = roundNumberElement.textContent;
-
-                if (newRoundText !== currentRoundText) {
-                    console.log(`Round changed: ${currentRoundText} -> ${newRoundText}`);
-                    currentRoundText = newRoundText; // Update current round
-                    resetHintsContent(); // Reset hints content when a new round starts
-                    errorDisplayed = false; // Reset the error flag
-                }
-            }
+    function observeRoundChange(GEF) {
+        // Event listener for round start
+        GEF.events.addEventListener('round_start', (event) => {
+            resetHintsContent(); // Reset hints content when a new round starts
+            errorDisplayed = false; // Reset the error flag
         });
-
-        // Observe changes in the main container
-        observer.observe(document.querySelector('#__next'), { subtree: true, childList: true });
     }
 
     // Reset hints when the round is over
@@ -630,6 +672,7 @@ function runScript() {
             window.hintsContent.innerHTML = `<b><i>LOADING...</i></b>`;
         }
         window.currentIndex = 0; // Reset the global currentIndex
+        window.currentLevel = null; // Reset the global currentLevel
     }
 
     //// DISPLAY
@@ -637,11 +680,11 @@ function runScript() {
     function formatContent(text, isNote = false) {
         // Replace escaped newline characters with actual newline characters
         text = text.replace(/\\n/g, '\n');
-    
+
         // Split the text into lines
         const lines = text.split('\n');
         let formattedText = '';
-    
+
         lines.forEach((line, index) => {
             // Check if the line starts with an asterisk for bullet points
             if (line.trim().startsWith('*')) {
@@ -663,23 +706,23 @@ function runScript() {
                 }
             }
         });
-    
+
         // Close any open list
         if (formattedText.endsWith('</li>')) {
             formattedText += '</ul>';
         }
-    
+
         return formattedText;
     }
 
     // Helper functions: tags
     function createTagElements(meta) {
         if (!meta.type) return null;
-    
+
         let tagsContainer = document.createElement('div');
         tagsContainer.style.textAlign = 'center'; // Center the tags
         tagsContainer.style.lineHeight = '1.5'; // Increase line spacing within the tags
-    
+
         let tags = meta.type.split(', ');
         tags.forEach(tag => {
             let tagElement = document.createElement('span');
@@ -690,7 +733,7 @@ function runScript() {
             tagElement.style.marginBottom = '5px'; // Add space between tags
             tagElement.style.borderRadius = '12px';
             tagElement.style.backgroundColor = `${tagColors[tag] || '#000'}`;
-    
+
             // Set text color based on background
             const darkBackgroundTags = ['Camera', 'Vehicles', 'Architecture', 'Urbanism', 'Trekker', 'Language', 'Miscellaneous', 'Markers', 'Bollards', 'Vegetation', 'Stickers', 'Soil', 'Flags', 'Brands'];
             if (darkBackgroundTags.includes(tag)) {
@@ -698,13 +741,13 @@ function runScript() {
             } else {
                 tagElement.style.color = '#000000';
             }
-    
+
             tagsContainer.appendChild(tagElement);
         });
-    
+
         return tagsContainer;
     }
-    
+
     // Helper functions: content
     function createContentElement(meta) {
         let contentElement = document.createElement('p'); // Use p to contain formatted content
@@ -713,16 +756,16 @@ function runScript() {
             contentElement.innerHTML = formatContent(meta.content.replace(/[\{\}]/g, ''));
         } else {
             // Hide mode: replace text within curly brackets with a single line
-            contentElement.innerHTML = formatContent(meta.content.replace(/\{([^}]*)\}/g, match => 
+            contentElement.innerHTML = formatContent(meta.content.replace(/\{([^}]*)\}/g, match =>
                 `<span style="border-bottom: 1.5px solid white; display: inline-block; width: ${6}ch; height: 2px; vertical-align: 0.25px;"></span>`));
         }
         return contentElement;
     }
-    
+
     // Helper functions: notes
     function createNoteElement(meta) {
         if (!meta.note) return null;
-    
+
         let noteElement = document.createElement('p'); // Use p to contain formatted note
         noteElement.style.color = 'lightgray'; // Make Notes golden
         noteElement.style.fontSize = '10px';
@@ -731,29 +774,29 @@ function runScript() {
             noteElement.innerHTML = formatContent(meta.note.replace(/[\{\}]/g, ''), true);
         } else {
             // Hide mode: replace text within curly brackets with a single line
-            noteElement.innerHTML = formatContent(meta.note.replace(/\{([^}]*)\}/g, match => 
+            noteElement.innerHTML = formatContent(meta.note.replace(/\{([^}]*)\}/g, match =>
                 `<span style="border-bottom: 1.5px solid lightgray; display: inline-block; width: ${4.5}ch; height: 2px; vertical-align: 0.25px;"></span>`), true);
         }
         return noteElement;
     }
-    
+
     // Helper functions: images
     function createImageElement(meta) {
         if (!meta.image) return null;
-    
+
         let imageElement = document.createElement('img');
         imageElement.src = meta.image;
         imageElement.style.maxWidth = '100%';
         imageElement.style.marginTop = '5px';
         imageElement.style.cursor = 'pointer';
-    
+
         // Add instruction text below the image
         let instructionText = document.createElement('p');
         instructionText.textContent = 'Click on the image to enlarge it';
         instructionText.style.fontSize = '10px';
         instructionText.style.color = 'lightgray';
         instructionText.style.textAlign = 'center';
-    
+
         if (window.revealInfoInput && window.revealInfoInput.checked) {
             // Reveal mode: show images
             imageElement.style.display = 'block';
@@ -763,25 +806,23 @@ function runScript() {
             imageElement.style.display = 'none';
             instructionText.style.display = 'none';
         }
-    
-        console.log("Adding click event listener to image");
+
         imageElement.addEventListener('click', (event) => {
             event.stopPropagation();
-            console.log("Image clicked, opening modal");
             openModal(meta.image);
         });
-    
+
         return { imageElement, instructionText };
     }
-    
+
     // Helper functions: credits
     function createCreditsElement(meta) {
         if (!meta.country || !window.revealInfoInput || !window.revealInfoInput.checked) return null;
-    
+
         let creditsElement = document.createElement('p');
         creditsElement.style.color = 'white'; // Style for credits
         let countries = meta.country.split(', ');
-    
+
         let creditsContent = 'Learn more about ';
         countries.forEach((country, index) => {
             let countryInfo = countryData[country];
@@ -812,7 +853,7 @@ function runScript() {
             carouselCounter.textContent = `${index + 1}/${metasElements.length}`;
         }
     }
-    
+
     // Filter metas into tabs
     function showMetasByLevel(level, resetIndex = true) {
         window.currentLevel = level; // Set the current level
@@ -820,7 +861,7 @@ function runScript() {
         const metaContent = document.getElementById('meta-content');
         const initialMessage = document.getElementById('initial-message');
         const carouselControls = document.getElementById('carousel-controls');
-    
+
         if (metas.length === 0) {
             metaContent.innerHTML = `<p><i>No tips found at the ${level.toLowerCase()} level.</i></p>`;
             metaContent.style.fontSize = '12px';
@@ -845,42 +886,42 @@ function runScript() {
             metaContent.style.textAlign = 'left';
             carouselControls.style.display = 'block'; // Show carousel controls
         }
-    
+
         initialMessage.style.display = 'none';
         metaContent.style.display = 'block';
-    
+
         // Update tab styles
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
         document.getElementById(`tab-${level.toLowerCase()}`).classList.add('active');
-    
+
         // Reset carousel index when switching tabs, unless specified otherwise
         if (resetIndex) {
             window.currentIndex = 0;
         }
-    
+
         // Show the current meta
         showMeta(window.currentIndex);
-    
+
         // Add carousel functionality to cycle through metas
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const carouselCounter = document.getElementById('carouselCounter');
-    
+
         if (prevButton && nextButton && carouselCounter) {
             prevButton.onclick = () => {
                 window.currentIndex = (window.currentIndex > 0) ? window.currentIndex - 1 : metas.length - 1;
                 showMeta(window.currentIndex);
             };
-    
+
             nextButton.onclick = () => {
                 window.currentIndex = (window.currentIndex < metas.length - 1) ? window.currentIndex + 1 : 0;
                 showMeta(window.currentIndex);
             };
-    
+
             // Update the counter
             carouselCounter.textContent = `${window.currentIndex + 1}/${metas.length}`;
         }
-    
+
         // Reattach event listeners for images
         metas.forEach((meta, index) => {
             let imageElements = createImageElement(meta);
@@ -896,7 +937,7 @@ function runScript() {
             }
         });
     }
-    
+
     // Check if the currently active tab is clicked again
     function toggleMetasByLevel(level) {
         if (window.currentLevel === level) {
@@ -919,10 +960,10 @@ function runScript() {
             }
             window.hintsContent.innerHTML = ''; // Clear only the content area
         }
-    
+
         window.hintsContent.style.display = 'block'; // Change from flex to block for normal flow
         window.hintsContent.style.textAlign = 'left'; // Align text to the left
-    
+
         // Extract unique tags
         let uniqueTags = new Set();
         metas.forEach(meta => {
@@ -930,11 +971,11 @@ function runScript() {
                 meta.type.split(', ').forEach(tag => uniqueTags.add(tag));
             }
         });
-    
+
         // Create a temporary meta object to use createTagElements
         let tempMeta = { type: Array.from(uniqueTags).join(', ') };
         let tagsContainer = createTagElements(tempMeta);
-    
+
         // Display initial message
         let initialMessage = `
             <div id="tabs" style="display: flex; justify-content: center; margin-bottom: 10px;">
@@ -957,15 +998,15 @@ function runScript() {
             <div id="meta-content" style="display: none;"></div>
         `;
         window.hintsContent.innerHTML = initialMessage;
-    
+
         // Store the current metas for refreshing
         window.currentMetas = metas;
-    
+
         // Add event listeners to tabs
         document.getElementById('tab-continent').addEventListener('click', () => toggleMetasByLevel('Continent'));
         document.getElementById('tab-country').addEventListener('click', () => toggleMetasByLevel('Country'));
         document.getElementById('tab-region').addEventListener('click', () => toggleMetasByLevel('Region'));
-    
+
         // Add CSS for hover effects and active tab highlighting
         const style = document.createElement('style');
         style.innerHTML = `
@@ -1008,14 +1049,13 @@ function runScript() {
 
     // Picture enlargement
     function openModal(imageSrc) {
-        console.log("Opening modal with image source:", imageSrc);
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeBtn = document.querySelector('.close');
-    
+
         modal.style.display = 'flex'; // Set display to flex when showing the modal
         modalImg.src = imageSrc;
-    
+
         // Add instruction text for closing the modal
         let instructionText = document.getElementById('modalInstructionText');
         if (!instructionText) {
@@ -1030,23 +1070,22 @@ function runScript() {
             instructionText.style.fontSize = '14px';
             modal.appendChild(instructionText);
         }
-    
+
         function closeModal() {
-            console.log("Closing modal");
             modal.style.display = 'none';
             if (instructionText) {
                 instructionText.remove(); // Remove instruction text when closing
             }
         }
-    
+
         closeBtn.onclick = closeModal;
-    
+
         modal.onclick = function(event) {
             if (event.target === modal) {
                 closeModal();
             }
         };
-    
+
         // Close the modal if the hints container is clicked
         window.hintsContainer.addEventListener('click', closeModal);
     }
@@ -1055,7 +1094,7 @@ function runScript() {
     function changeHintsContainerBackground(level) {
         const hintsContainer = window.hintsContainer;
         if (!hintsContainer) return;
-    
+
         switch (level) {
             case 'Continent':
                 hintsContainer.style.backgroundColor = 'rgba(8, 24, 35, 0.7)'; // Light blue tinge
@@ -1083,12 +1122,18 @@ function runScript() {
     interceptGoogleMapsAPI();
 
     // Initialize UI
-    checkMap();
+    setupHintsUI();
+    checkMap(GEF);
     injectCSS(flagiconsUrl);
 
-    // Start observing round changes
-    observeRoundChange();
-    }
+    // Start observing round and URL changes
+    observeRoundChange(GEF);
+    
+    // Observe changes in the URL
+    const urlObserver = new MutationObserver(() => {
+        checkMap(GEF);
+    });
 
-// Run
-runScript();
+    // Start observing changes in the URL
+    urlObserver.observe(document.body, { childList: true, subtree: true });
+}
