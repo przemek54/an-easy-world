@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file. This change
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-15-01
+### Added
+- Connect to external URLs through @connect tags. Users no longer need to manually whitelist connections.
+
 ## [0.1.0] - 2025-14-01
 ### Added
 - Tips for GeoGuessr map "An Easy World" fetched from the database.
@@ -15,9 +19,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Transition to Semantic Versioning (SemVer).
 - Reclassify version from `1.0.5` to `0.1.0` to indicate pre-release status.
-
----
-
-## What Next?
-Future versions will adhere to SemVer. The focus will be on improving usability, introducing new features like meta-type categorization, and addressing user feedback.
-
