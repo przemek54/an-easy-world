@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      0.1.0
+// @version      0.1.1
 // @description  Display tips on An Easy World
 // @author       54
 // @match        https://www.geoguessr.com/*
@@ -13,6 +13,10 @@
 // @downloadURL  https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js
 // @updateURL    https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js
 // @require      https://miraclewhips.dev/geoguessr-event-framework/geoguessr-event-framework.min.js
+// @connect      docs.google.com
+// @connect      cdn.jsdelivr.net
+// @connect      przemek54.github.io
+// @connect      googleusercontent.com
 // ==/UserScript==
 
 // URLs for Google Sheets
