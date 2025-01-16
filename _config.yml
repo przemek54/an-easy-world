@@ -1,4 +1,4 @@
 plugins:
-  - jekyll-remote-theme
+  - jekyll-include-cache
 
-remote_theme: kitian616/jekyll-TeXt-theme
+remote_theme: "mmistakes/minimal-mistakes@4.26.2"
