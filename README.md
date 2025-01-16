@@ -18,7 +18,7 @@ An Easy World (AEW) serves as an unofficial extension of the **[PlonkIt guide](h
 
 ![Gameplay image](https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/gameplay-image.png)
 
-As of version 0.3.1, the map contains 2,325 locations across 1 continent. For more detailed statistics on current progress, visit the **[AEW Hub](https://przemek54.github.io/an-easy-world/)**.
+As of version 0.3.1, the map contains 2,325 locations across 1 continent. For more detailed statistics on current progress, visit the **[AEW Hub](https://przemek54.github.io/AEW/)**.
 
 **[Play the map here!](https://www.geoguessr.com/maps/66ca6b77095a4f41baf80ece)**
 
@@ -33,10 +33,32 @@ The core functionality of the script is **Reveal Mode**, which allows you to sho
 
 The script only works on AEW and **should only be used in NMPZ**. Moving breaks it completely because it can't fetch the correct location, and panning results in an incomplete experience because not all clues available to you are displayed as hints.
 
-**[Install the script here!](https://przemek54.github.io/an-easy-world/)**
+## Installation guide
+1. Install the **TamperMonkey** extension for your browser. It's a tool that allows users to add Userscripts to websites (such as this one). You can find links for each browser **[here](https://www.tampermonkey.net/index.php?browser=chrome&locale=en)**.
+2. If you use Google Chrome, you will need to enable **developer mode**. To do that, go to Settings > Extensions, and in the top-right corner you should have a toggle switch for developer mode. If you use a different browser, you should be good to go.
+
+![Developer mode on Google Chrome](https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/devmode.png)
+
+3. **[Click this link.](https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js)** It should open a TamperMonkey window prompting you to install the script. Click "**Install**". You can also reinstall it the same way in case you mess around with the script and break it. The script should update automatically, but if you ever want to do it manually, click that link as well.
+
+![Click "Install" when prompted](https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/install.png)
+
+4. Test it out! Start a game on **[An Easy World](https://www.geoguessr.com/maps/66ca6b77095a4f41baf80ece)** and you should get a pop-up with hints in the top-left corner. You may have to refresh the website on the first run.
+
+## Troubleshooting
+
+If step 3 didn't work (you didn't get a pop-up asking you to install), it might mean TamperMonkey isn't set up properly. Make sure you have it in your list of extensions. If you use Google Chrome, **make sure developer mode is turned on** (step 2). Try to look for the answer online, or on **[TamperMonkey's FAQ page](https://www.tampermonkey.net/faq.php)**.
+
+If TamperMonkey otherwise works normally, you can also install the script manually:
+1. Go to **Extensions** > **TamperMonkey** > **Add a new script**. It will open up the editor for you to create a new Userscript. Clear whatever is there, make sure it's empty.
+2. Download the latest release of the **AEW script** (whatever is at the top **[here](https://github.com/przemek54/an-easy-world/releases)**)
+3. Unzip the file, open AnEasyWorld.user.js in Notepad, and **copy** the entire content of the file.
+4. **Paste** it into the Userscript editor on TamperMonkey and save (Ctrl+S).
+5. Test it out on the **[AEW map](https://www.geoguessr.com/maps/66ca6b77095a4f41baf80ece)**, refresh if it still doesn't work.
+6. If the issue persists, feel free to reach out to me here through GitHub issues, on Discord (**przemek54**), or even in GeoGuessr (**[54](https://www.geoguessr.com/user/57f8b66418cee073b8279fdc)**).
 
 ## Further documentation
-This note is meant to serve as a quick introduction. For more information regarding the project, detailed map statistics, changelog, FAQ and more, visit the official AEW website – **[www.przemek54.github.io/an-easy-world](https://przemek54.github.io/an-easy-world/)**.
+This note is meant to serve as a quick introduction. For more information regarding the project, using the script, detailed map statistics, changelog, FAQ and more, visit the **AEW Hub** – **[www.przemek54.github.io/AEW](https://przemek54.github.io/AEW/)**.
 
 Information related to the script itself (public API, script changelog) can be found in this GitHub repository. I encourage any feedback through issues or pull requests.
 
