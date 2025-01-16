@@ -40,6 +40,9 @@ This note is meant to serve as a quick introduction. For more information regard
 
 Information related to the script itself (public API, script changelog) can be found in this GitHub repository. I encourage any feedback through issues or pull requests.
 
+## Credits
+This project includes code from **[Logan Card (0x978)](https://www.0x978.com/)**, used with his permission. His original work can be found **[here](https://github.com/0x978/GeoGuessr_Resolver)**.
+
 ## Other resources
 There are a few projects with a similar premise that I highly recommend you try out:
 * **[LearnableMeta](https://learnablemeta.com/)** by **trausi** – if you like AEW, you'll *love* LearnableMeta. It's a massive project that also features a script with hints (by **plurk**), a variety of maps for different regions and countries, as well as a tool for creating maps designed for their script with a community of creators. There are countless maps like AEW over there, so get lost in exploration!
