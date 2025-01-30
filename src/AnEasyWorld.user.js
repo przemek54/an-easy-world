@@ -8,7 +8,7 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @icon         https://przemek54.github.io/an-easy-world/assets/aew-icon.png
+// @icon         https://przemek54.github.io/an-easy-world/assets/icon.ico
 // @license      GNU GPLv3
 // @downloadURL  https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js
 // @updateURL    https://przemek54.github.io/an-easy-world/src/AnEasyWorld.user.js

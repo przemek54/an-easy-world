@@ -18,7 +18,7 @@ An Easy World (AEW) serves as an unofficial extension of the **[PlonkIt guide](h
 
 ![Gameplay image](https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/gameplay-image.png)
 
-As of version 0.3.1, the map contains 2,325 locations across 1 continent. For more detailed statistics on current progress, visit the **[AEW Hub](https://przemek54.github.io/AEW/)**.
+As of version 0.3.1, the map contains 2,325 locations across 1 continent. For more detailed statistics and current progress, visit the **[AEW Hub](https://przemek54.github.io/AEW/)**.
 
 **[Play the map here!](https://www.geoguessr.com/maps/66ca6b77095a4f41baf80ece)**
 
