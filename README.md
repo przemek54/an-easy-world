@@ -1,6 +1,6 @@
 
 <p  align="center">
-<img  src="https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/aew-icon.png"  alt="Logo"  width="300"  style="margin-bottom: 0;"></p>
+<img  src="https://raw.githubusercontent.com/przemek54/an-easy-world/main/assets/logo.png"  alt="Logo"  width="300"  style="margin-bottom: 0;"></p>
 <p  align="center">by <b>54</b></p>
 
   
