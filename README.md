@@ -58,7 +58,7 @@ If TamperMonkey otherwise works normally, you can also install the script manual
 6. If the issue persists, feel free to reach out to me here through GitHub issues, on Discord (**przemek54**), or even in GeoGuessr (**[54](https://www.geoguessr.com/user/57f8b66418cee073b8279fdc)**).
 
 ## Further documentation
-This note is meant to serve as a quick introduction. For more information regarding the project, using the script, detailed map statistics, changelog, FAQ and more, visit the **AEW Hub** – **[www.przemek54.github.io/AEW](https://przemek54.github.io/AEW/)**.
+This note is meant to serve as a quick introduction. For more information regarding the project, using the script, detailed map statistics, changelog, FAQ and more, visit the **AEW Hub** – **[www.aneasyworld.eu](https://www.aneasyworld.eu/)**.
 
 Information related to the script itself (public API, script changelog) can be found in this GitHub repository. I encourage any feedback through issues or pull requests.
 
