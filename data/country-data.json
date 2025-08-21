@@ -139,7 +139,7 @@
         "code": "iq",
         "url": "https://www.plonkit.net/iraq"
     },
-    "Israel and the West Bank": {
+    "Israel": {
         "code": "il",
         "url": "https://www.plonkit.net/israel-west-bank"
     },
@@ -190,6 +190,10 @@
     "Pakistan": {
         "code": "pk",
         "url": "https://www.plonkit.net/pakistan"
+    },
+    "Palestine": {
+        "code": "ps",
+        "url": "https://www.plonkit.net/israel-west-bank"
     },
     "Philippines": {
         "code": "ph",
