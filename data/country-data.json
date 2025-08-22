@@ -59,6 +59,10 @@
         "code": "ml",
         "url": "https://www.plonkit.net/mali"
     },
+    "Namibia" : {
+        "code": "na",
+        "url": "https://www.plonkit.net/namibia"
+    },
     "Nigeria": {
         "code": "ng",
         "url": "https://www.plonkit.net/nigeria"
@@ -139,8 +143,8 @@
         "code": "iq",
         "url": "https://www.plonkit.net/iraq"
     },
-    "Israel": {
-        "code": "il",
+    "Israel and Palestine": {
+        "code": "ip",
         "url": "https://www.plonkit.net/israel-west-bank"
     },
     "Japan": {
@@ -191,10 +195,6 @@
         "code": "pk",
         "url": "https://www.plonkit.net/pakistan"
     },
-    "Palestine": {
-        "code": "ps",
-        "url": "https://www.plonkit.net/israel-west-bank"
-    },
     "Philippines": {
         "code": "ph",
         "url": "https://www.plonkit.net/philippines"
@@ -227,6 +227,10 @@
         "code": "ae",
         "url": "https://www.plonkit.net/united-arab-emirates"
     },
+    "Vietnam": {
+        "code": "vn",
+        "url": "https://www.plonkit.net/vietnam"
+    },
     "Albania": {
         "code": "al",
         "url": "https://www.plonkit.net/albania"
@@ -240,7 +244,7 @@
         "url": "https://www.plonkit.net/austria"
     },
     "Azores": {
-        "code": "pt",
+        "code": "ac",
         "url": "https://www.plonkit.net/azores"
     },
     "Belarus": {
@@ -336,7 +340,7 @@
         "url": "https://www.plonkit.net/luxembourg"
     },
     "Madeira": {
-        "code": "pt",
+        "code": "mi",
         "url": "https://www.plonkit.net/madeira"
     },
     "Malta": {
@@ -420,7 +424,7 @@
         "url": "https://www.plonkit.net/united-kingdom"
     },
     "Alaska": {
-        "code": "us",
+        "code": "ak",
         "url": "https://www.plonkit.net/alaska"
     },
     "Bermuda": {
@@ -448,7 +452,7 @@
         "url": "https://www.plonkit.net/guatemala"
     },
     "Hawaii": {
-        "code": "us",
+        "code": "hi",
         "url": "https://www.plonkit.net/hawaii"
     },
     "Martinique": {
