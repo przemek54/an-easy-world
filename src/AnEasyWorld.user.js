@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      0.1.1
+// @version      0.2.0
 // @description  Display tips on An Easy World
 // @author       54
 // @match        https://www.geoguessr.com/*
@@ -20,10 +20,15 @@
 // ==/UserScript==
 
 // URLs for Google Sheets
-const locationsSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=0&single=true&output=tsv';
-const metasSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv';
-const flagiconsUrl = 'https://cdn.jsdelivr.net/gh/przemek54/flag-icons@v0.1.3/css/flag-icons.min.css';
-const countryDataUrl = 'https://przemek54.github.io/an-easy-world/data/country-data.json';
+const locationsSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=0&single=true&output=tsv";
+const metasSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv";
+const flagiconsUrl = "https://cdn.jsdelivr.net/gh/przemek54/flag-icons@v0.1.3/css/flag-icons.min.css";
+const countryDataUrl = "https://przemek54.github.io/an-easy-world/data/country-data.json";
+
+// Map IDs
+const allowedMapIDs = new Set([
+    "66ca6b77095a4f41baf80ece" // An Easy World (alpha)
+])
 
 // Run
 GeoGuessrEventFramework.init().then((GEF) => {
@@ -43,10 +48,47 @@ function runScript(GEF) {
     let isHintsButtonVisible = false; // Flag to track the visibility state of the hintsButton
 
     //// INITIALIZING / HIDING
-    // Check if the current URL matches the game URL pattern
-    function isGameURL() {
-        return window.location.href.includes('/game/');
-    }
+    // Detect URL changes
+    function observeUrlChange(callback, GEF) {
+        if (typeof callback !== "function") {
+            console.warn("Callback is not a function! If you have just launched or refreshed the webpage, feel free to ignore it.", callback);
+            return;
+        }
+
+        if (!GEF || !GEF.events) {
+            console.warn("observeUrlChange: GEF is not initialized.");
+            return;
+        }
+
+        let oldHref = location.href;
+
+        // Fire callback immediately
+        callback(oldHref, GEF);
+
+        const check = () => {
+            if (oldHref !== location.href) {
+                oldHref = location.href;
+                callback(oldHref, GEF);
+            }
+        };
+
+        // Patch pushState
+        const pushState = history.pushState;
+        history.pushState = function(...args) {
+            pushState.apply(this, args);
+            check();
+        };
+
+        // Patch replaceState
+        const replaceState = history.replaceState;
+        history.replaceState = function(...args) {
+            replaceState.apply(this, args);
+            check();
+        };
+
+        // Handle back/forward navigation
+        window.addEventListener("popstate", check);
+    };
 
     // Hide UI elements
     function hideUI() {
@@ -55,19 +97,19 @@ function runScript(GEF) {
     
         setTimeout(() => {
             if (window.hintsContainer) {
-                window.hintsButton.classList.add('slide-up');
-                window.hintsContainer.style.display = 'none';
+                window.hintsButton.classList.add("slide-up");
+                window.hintsContainer.style.display = "none";
                 setTimeout(() => {
-                    window.hintsContainer.style.display = 'none';
-                    window.hintsContainer.classList.remove('slide-up');
+                    window.hintsContainer.style.display = "none";
+                    window.hintsContainer.classList.remove("slide-up");
                 }, 300); // Match the duration of the slide-up animation
             }
             if (window.hintsButton) {
-                window.hintsButton.style.display = 'block'; // Ensure it's visible before animating
-                window.hintsButton.classList.add('slide-up');
+                window.hintsButton.style.display = "block"; // Ensure it's visible before animating
+                window.hintsButton.classList.add("slide-up");
                 setTimeout(() => {
-                    window.hintsButton.style.display = 'none';
-                    window.hintsButton.classList.remove('slide-up');
+                    window.hintsButton.style.display = "none";
+                    window.hintsButton.classList.remove("slide-up");
                 }, 300); // Match the duration of the slide-up animation
             }
         }, 1000); // 1-second delay
@@ -80,12 +122,12 @@ function runScript(GEF) {
     
         setTimeout(() => {
             if (window.hintsButton) {
-                hintsButton.innerHTML = 'Show Hints';
-                window.hintsButton.style.display = 'block'; // Ensure it's visible before animating
-                window.hintsButton.classList.remove('slide-up');
-                window.hintsButton.classList.add('slide-down');
+                hintsButton.innerHTML = "Show Hints";
+                window.hintsButton.style.display = "block"; // Ensure it's visible before animating
+                window.hintsButton.classList.remove("slide-up");
+                window.hintsButton.classList.add("slide-down");
                 setTimeout(() => {
-                    window.hintsButton.classList.remove('slide-down');
+                    window.hintsButton.classList.remove("slide-down");
                 }, 300); // Match the duration of the slide-down animation
             }
         }, 1000); // 1-second delay
@@ -94,7 +136,7 @@ function runScript(GEF) {
     //// STYLE ELEMENTS
     // Adding style
     function addStyle() {
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.textContent = `
             .slide-up {
                 animation: slide-up 0.3s forwards;
@@ -218,19 +260,19 @@ function runScript(GEF) {
     // Modal for enlarging images
     function addModal() {
         // Create modal container
-        const modal = document.createElement('div');
-        modal.id = 'imageModal';
-        modal.className = 'modal';
+        const modal = document.createElement("div");
+        modal.id = "imageModal";
+        modal.className = "modal";
 
         // Create close button
-        const closeBtn = document.createElement('span');
-        closeBtn.className = 'close';
-        closeBtn.innerHTML = '&times;';
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close";
+        closeBtn.innerHTML = "&times;";
 
         // Create modal image
-        const modalImg = document.createElement('img');
-        modalImg.className = 'modal-content';
-        modalImg.id = 'modalImage';
+        const modalImg = document.createElement("img");
+        modalImg.className = "modal-content";
+        modalImg.id = "modalImage";
 
         // Append elements to modal
         modal.appendChild(closeBtn);
@@ -246,57 +288,57 @@ function runScript(GEF) {
         addModal();
 
         // Create and style the "Hints" button
-        const hintsButton = document.createElement('button');
-        hintsButton.innerHTML = 'Show Hints';
-        hintsButton.style.fontStyle = 'italic';
-        hintsButton.style.fontSize = '18px';
-        hintsButton.style.color = 'white';
-        hintsButton.style.fontWeight = '700';
-        hintsButton.style.position = 'absolute';
-        hintsButton.style.top = '10px';
-        hintsButton.style.left = '10px';
-        hintsButton.style.background = 'linear-gradient(180deg, rgba(161,155,217,.6) 0%, rgba(161,155,217,0) 50%, rgba(161,155,217,0) 50%), var(--ds-color-purple-80)';
-        hintsButton.style.border = 'none';
-        hintsButton.style.padding = '10px';
-        hintsButton.style.cursor = 'pointer';
-        hintsButton.style.zIndex = '10000';
-        hintsButton.style.borderRadius = '8px';
-        hintsButton.style.display = 'none';
+        const hintsButton = document.createElement("button");
+        hintsButton.innerHTML = "Show Hints";
+        hintsButton.style.fontStyle = "italic";
+        hintsButton.style.fontSize = "18px";
+        hintsButton.style.color = "white";
+        hintsButton.style.fontWeight = "700";
+        hintsButton.style.position = "absolute";
+        hintsButton.style.top = "10px";
+        hintsButton.style.left = "10px";
+        hintsButton.style.background = "linear-gradient(180deg, rgba(161,155,217,.6) 0%, rgba(161,155,217,0) 50%, rgba(161,155,217,0) 50%), var(--ds-color-purple-80)";
+        hintsButton.style.border = "none";
+        hintsButton.style.padding = "10px";
+        hintsButton.style.cursor = "pointer";
+        hintsButton.style.zIndex = "10000";
+        hintsButton.style.borderRadius = "8px";
+        hintsButton.style.display = "none";
 
         // Create and style the hints container
-        const hintsContainer = document.createElement('div');
-        hintsContainer.style.position = 'absolute';
-        hintsContainer.style.top = '55px'; // Adjust this value to position the container lower
-        hintsContainer.style.left = '10px';
-        hintsContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        hintsContainer.style.color = 'white';
-        hintsContainer.style.padding = '10px';
-        hintsContainer.style.display = 'none'; // Start hidden
-        hintsContainer.style.zIndex = '10000';
-        hintsContainer.style.width = '300px'; // Set width to prevent shrinking
-        hintsContainer.style.maxHeight = '400px';
-        hintsContainer.style.overflowY = 'auto'; // Allow scrolling if content is too large
-        hintsContainer.classList.add('slide-up'); // Add initial class for sliding up
+        const hintsContainer = document.createElement("div");
+        hintsContainer.style.position = "absolute";
+        hintsContainer.style.top = "55px"; // Adjust this value to position the container lower
+        hintsContainer.style.left = "10px";
+        hintsContainer.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        hintsContainer.style.color = "white";
+        hintsContainer.style.padding = "10px";
+        hintsContainer.style.display = "none"; // Start hidden
+        hintsContainer.style.zIndex = "10000";
+        hintsContainer.style.width = "300px"; // Set width to prevent shrinking
+        hintsContainer.style.maxHeight = "400px";
+        hintsContainer.style.overflowY = "auto"; // Allow scrolling if content is too large
+        hintsContainer.classList.add("slide-up"); // Add initial class for sliding up
 
         // Create the slider toggle for "Reveal Info"
-        const revealInfoContainer = document.createElement('div');
-        revealInfoContainer.style.display = 'flex'; // Use flexbox for layout
-        revealInfoContainer.style.alignItems = 'center'; // Center items vertically
-        revealInfoContainer.style.marginBottom = '10px'; // Add some space below the slider
+        const revealInfoContainer = document.createElement("div");
+        revealInfoContainer.style.display = "flex"; // Use flexbox for layout
+        revealInfoContainer.style.alignItems = "center"; // Center items vertically
+        revealInfoContainer.style.marginBottom = "10px"; // Add some space below the slider
 
-        const revealInfoText = document.createElement('div');
-        revealInfoText.innerHTML = '<b><i>REVEAL INFO</i></b>';
-        revealInfoText.style.fontSize = '16px';
-        revealInfoText.style.marginRight = '10px';
+        const revealInfoText = document.createElement("div");
+        revealInfoText.innerHTML = "<b><i>REVEAL INFO</i></b>";
+        revealInfoText.style.fontSize = "16px";
+        revealInfoText.style.marginRight = "10px";
 
-        const revealInfoLabel = document.createElement('label');
-        revealInfoLabel.className = 'switch';
+        const revealInfoLabel = document.createElement("label");
+        revealInfoLabel.className = "switch";
 
-        const revealInfoInput = document.createElement('input');
-        revealInfoInput.type = 'checkbox';
+        const revealInfoInput = document.createElement("input");
+        revealInfoInput.type = "checkbox";
 
-        const revealInfoSlider = document.createElement('span');
-        revealInfoSlider.className = 'slider';
+        const revealInfoSlider = document.createElement("span");
+        revealInfoSlider.className = "slider";
 
         revealInfoLabel.appendChild(revealInfoInput);
         revealInfoLabel.appendChild(revealInfoSlider);
@@ -307,14 +349,14 @@ function runScript(GEF) {
         hintsContainer.appendChild(revealInfoContainer);
 
         // Create a content section to hold the metas
-        const hintsContent = document.createElement('div');
-        hintsContent.style.marginTop = '10px'; // Add space for the carousel controls
-        hintsContent.style.display = 'flex';
-        hintsContent.style.alignItems = 'center';
-        hintsContent.style.justifyContent = 'center';
-        hintsContent.style.height = '100%'; // Ensure the container takes full height
-        hintsContent.style.textAlign = 'center'; // Center text horizontally
-        hintsContent.innerHTML = '<b><i>LOADING...</i></b>'; // Initial loading message
+        const hintsContent = document.createElement("div");
+        hintsContent.style.marginTop = "10px"; // Add space for the carousel controls
+        hintsContent.style.display = "flex";
+        hintsContent.style.alignItems = "center";
+        hintsContent.style.justifyContent = "center";
+        hintsContent.style.height = "100%"; // Ensure the container takes full height
+        hintsContent.style.textAlign = "center"; // Center text horizontally
+        hintsContent.innerHTML = "<b><i>LOADING...</i></b>"; // Initial loading message
         hintsContainer.appendChild(hintsContent); // Append content section to the container
 
         // Append the button and hints container to the body
@@ -327,32 +369,32 @@ function runScript(GEF) {
         window.hintsContent = hintsContent; // Reference for metas content
 
         // Toggle hints container visibility
-        hintsButton.addEventListener('click', () => {
-            if (hintsContainer.style.display === 'none') {
-                hintsContainer.style.display = 'block';
-                hintsContainer.classList.remove('slide-up');
-                hintsContainer.classList.add('slide-down');
-                hintsButton.textContent = 'Hide Hints';
+        hintsButton.addEventListener("click", () => {
+            if (hintsContainer.style.display === "none") {
+                hintsContainer.style.display = "block";
+                hintsContainer.classList.remove("slide-up");
+                hintsContainer.classList.add("slide-down");
+                hintsButton.textContent = "Hide Hints";
             } else {
-                hintsContainer.classList.remove('slide-down');
-                hintsContainer.classList.add('slide-up');
+                hintsContainer.classList.remove("slide-down");
+                hintsContainer.classList.add("slide-up");
                 setTimeout(() => {
-                    hintsContainer.style.display = 'none';
+                    hintsContainer.style.display = "none";
                 }, 300); // Match the duration of the slide-up animation
-                hintsButton.textContent = 'Show Hints';
+                hintsButton.textContent = "Show Hints";
             }
         });
 
         // Close the modal if the hints container is clicked
-        hintsContainer.addEventListener('click', () => {
-            const modal = document.getElementById('imageModal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none'; // Close the modal if it's open
+        hintsContainer.addEventListener("click", () => {
+            const modal = document.getElementById("imageModal");
+            if (modal.style.display === "flex") {
+                modal.style.display = "none"; // Close the modal if it's open
             }
         });
 
         // Toggle the mode when the slider is changed
-        revealInfoInput.addEventListener('change', () => {
+        revealInfoInput.addEventListener("change", () => {
             // Check if an error message is displayed
             if (errorDisplayed) {
                 return; // Skip refreshing metas if an error message is displayed
@@ -375,78 +417,74 @@ function runScript(GEF) {
 
     // Loading CSS style for flag functionality
     function injectCSS(url) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.type = "text/css";
         link.href = url;
         document.head.appendChild(link);
 
         // Fetch the JSON file
         GM_xmlhttpRequest({
-            method: 'GET',
+            method: "GET",
             url: countryDataUrl,
             onload: function(response) {
                 countryData = JSON.parse(response.responseText);
             },
             onerror: function(error) {
-                console.error('Error fetching flags.json:', error);
+                console.error("Error fetching flags.json:", error);
             }
         });
     }
 
     // Tag colors
     const tagColors = {
-        'Signs': '#f6b10f',
-        'Road': '#f9f536',
-        'Landscape': '#63d754',
-        'Poles' : '#b0b0b0',
-        'Agriculture' : '#bfbd5d',
-        'Vegetation' : '#177620',
-        'Language' : '#bf4075',
-        'Camera' : '#000000',
-        'Miscellaneous' : '#9026de',
-        'Plates' : '#ffffff',
-        'Shields' : '#b0d0b9',
-        'Markers' : '#136ca8',
-        'Bollards' : '#da4c14',
-        'Guardrails' : '#6fafbe',
-        'Stickers' : '#0b4fff',
-        'Chevrons' : '#f399e8',
-        'Soil' : '#9f7e27',
-        'Numbers' : '#bedff6',
-        'Symbols' : '#eb2ec1',
-        'Lamps & lights' : '#feffde',
-        'Vehicles' : '#570d07',
-        'Car' : '#ef1818',
-        'Architecture' : '#57351a',
-        'Brands' : '#4d2380',
-        'People' : '#ffc8aa',
-        'Weather' : '#73dcfc',
-        'Urbanism' : '#1e3d6b',
-        'Trekker' : '#4c5c29',
-        'Coverage' : '#50e6c0',
-        'Status' : '#ffc3c3',
-        'Fences & walls' : '#ffe5a0'
+        "Signs": "#f6b10f",
+        "Road": "#f9f536",
+        "Landscape": "#63d754",
+        "Poles" : "#b0b0b0",
+        "Agriculture" : "#bfbd5d",
+        "Vegetation" : "#177620",
+        "Language" : "#bf4075",
+        "Camera" : "#000000",
+        "Miscellaneous" : "#9026de",
+        "Plates" : "#ffffff",
+        "Shields" : "#b0d0b9",
+        "Markers" : "#136ca8",
+        "Bollards" : "#da4c14",
+        "Guardrails" : "#6fafbe",
+        "Stickers" : "#0b4fff",
+        "Chevrons" : "#f399e8",
+        "Soil" : "#9f7e27",
+        "Numbers" : "#bedff6",
+        "Symbols" : "#eb2ec1",
+        "Lamps & lights" : "#feffde",
+        "Vehicles" : "#570d07",
+        "Car" : "#ef1818",
+        "Architecture" : "#57351a",
+        "Brands" : "#4d2380",
+        "People" : "#ffc8aa",
+        "Weather" : "#73dcfc",
+        "Urbanism" : "#1e3d6b",
+        "Trekker" : "#4c5c29",
+        "Coverage" : "#50e6c0",
+        "Status" : "#ffc3c3",
+        "Fences & walls" : "#ffe5a0"
     };
 
     // Checking the map name
     function checkMap(GEF) {
-        if (isGameURL()){
-            setTimeout(() => {
-                const mapName = GEF.state.map.name;
+        setTimeout(() => {
+            const mapId = GEF.state.map.id;
         
-                if (mapName === 'An Easy World (alpha)') {
-                    console.log("Correct map! Running script...");
-                    showUI();
-                } else {
-                    console.log("This script only works for the map 'An Easy World (alpha)'.");
-                    hideUI();
+            if (allowedMapIDs.has(mapId)) {
+                console.log("Compatible map! Running script...");
+                showUI();
+            } else {
+                console.log("Incompatible map.");
+                hideUI();
                 }
             }, 1000); // short delay
-        } else {
-            hideUI();
         }
-    }
 
     //// DISTANCE CALCULATION
     // Calculate the distance between two sets of coordinates (Haversine formula)
@@ -489,13 +527,13 @@ function runScript(GEF) {
         var originalOpen = XMLHttpRequest.prototype.open;
         let urlIntercepted = false;
         XMLHttpRequest.prototype.open = function(method, url) {
-            if (method.toUpperCase() === 'POST' &&
-                (url.startsWith('https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/GetMetadata') ||
-                 url.startsWith('https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/SingleImageSearch'))) {
+            if (method.toUpperCase() === "POST" &&
+                (url.startsWith("https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/GetMetadata") ||
+                 url.startsWith("https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/SingleImageSearch"))) {
 
                 urlIntercepted = true; // Mark that the expected URL has been intercepted
 
-                this.addEventListener('load', function () {
+                this.addEventListener("load", function () {
                     try {
                         let interceptedResult = this.responseText;
                         const pattern = /-?\d+\.\d+,-?\d+\.\d+/g;
@@ -559,7 +597,7 @@ function runScript(GEF) {
         }, 5000); // 5 seconds timeout
 
         GM_xmlhttpRequest({
-            method: 'GET',
+            method: "GET",
             url: locationsSheetUrl,
             onload: function(response) {
                 try {
@@ -608,12 +646,12 @@ function runScript(GEF) {
                     }
                 } catch (error) {
                     clearTimeout(timeoutId);
-                    displayError('Error processing location data.');
+                    displayError("Error processing location data.");
                 }
             },
             onerror: function(error) {
                 clearTimeout(timeoutId);
-                displayError('Error fetching location data.');
+                displayError("Error fetching location data.");
             }
         });
     }
@@ -622,7 +660,7 @@ function runScript(GEF) {
     // The meta ID column are: 1) Meta ID, 2) Level, 3) Type, 4) Content, 5) Note, 6) Image (raw), 7) Image, 8) Examples, 9) Number of examples, 10) Country
     function fetchMetas(metaIds) {
         GM_xmlhttpRequest({
-            method: 'GET',
+            method: "GET",
             url: metasSheetUrl,
             onload: function(response) {
                 let metasRows = parseTSV(response.responseText);
@@ -648,7 +686,7 @@ function runScript(GEF) {
                 displayMetas(metasToDisplay);
             },
             onerror: function(error) {
-                console.error('Error fetching metas:', error);
+                console.error("Error fetching metas:", error);
             }
         });
     }
@@ -662,7 +700,7 @@ function runScript(GEF) {
     // Detect when the round is over
     function observeRoundChange(GEF) {
         // Event listener for round start
-        GEF.events.addEventListener('round_start', (event) => {
+        GEF.events.addEventListener("round_start", (event) => {
             resetHintsContent(); // Reset hints content when a new round starts
             errorDisplayed = false; // Reset the error flag
         });
@@ -672,9 +710,9 @@ function runScript(GEF) {
     function resetHintsContent() {
         if (window.hintsContent) {
             changeHintsContainerBackground(null);
-            window.hintsContent.style.display = 'block';
-            window.hintsContent.style.textAlign = 'center';
-            window.hintsContent.style.height = '100%'; // Ensure the container takes full height
+            window.hintsContent.style.display = "block";
+            window.hintsContent.style.textAlign = "center";
+            window.hintsContent.style.height = "100%"; // Ensure the container takes full height
             window.hintsContent.innerHTML = `<b><i>LOADING...</i></b>`;
         }
         window.currentIndex = 0; // Reset the global currentIndex
@@ -685,24 +723,24 @@ function runScript(GEF) {
     // Content formatting
     function formatContent(text, isNote = false) {
         // Replace escaped newline characters with actual newline characters
-        text = text.replace(/\\n/g, '\n');
+        text = text.replace(/\\n/g, "\n");
 
         // Split the text into lines
-        const lines = text.split('\n');
-        let formattedText = '';
+        const lines = text.split("\n");
+        let formattedText = "";
 
         lines.forEach((line, index) => {
             // Check if the line starts with an asterisk for bullet points
-            if (line.trim().startsWith('*')) {
+            if (line.trim().startsWith("*")) {
                 // If the previous line was not a list, start a new list
-                if (!formattedText.endsWith('</li>')) {
-                    formattedText += '<ul style="list-style-type: disc; padding-left: 20px; margin-bottom: 4px;">';
+                if (!formattedText.endsWith("</li>")) {
+                    formattedText += "<ul style='list-style-type: disc; padding-left: 20px; margin-bottom: 4px;'>";
                 }
                 formattedText += `<li>${line.trim().substring(1).trim()}</li>`;
             } else {
                 // If the previous line was a list, close the list
-                if (formattedText.endsWith('</li>')) {
-                    formattedText += '</ul>';
+                if (formattedText.endsWith("</li>")) {
+                    formattedText += "</ul>";
                 }
                 // Add the line as a paragraph
                 if (isNote && index === 0) {
@@ -714,8 +752,8 @@ function runScript(GEF) {
         });
 
         // Close any open list
-        if (formattedText.endsWith('</li>')) {
-            formattedText += '</ul>';
+        if (formattedText.endsWith("</li>")) {
+            formattedText += "</ul>";
         }
 
         return formattedText;
@@ -725,27 +763,27 @@ function runScript(GEF) {
     function createTagElements(meta) {
         if (!meta.type) return null;
 
-        let tagsContainer = document.createElement('div');
-        tagsContainer.style.textAlign = 'center'; // Center the tags
-        tagsContainer.style.lineHeight = '1.5'; // Increase line spacing within the tags
+        let tagsContainer = document.createElement("div");
+        tagsContainer.style.textAlign = "center"; // Center the tags
+        tagsContainer.style.lineHeight = "1.5"; // Increase line spacing within the tags
 
-        let tags = meta.type.split(', ');
+        let tags = meta.type.split(", ");
         tags.forEach(tag => {
-            let tagElement = document.createElement('span');
+            let tagElement = document.createElement("span");
             tagElement.textContent = tag;
-            tagElement.style.display = 'inline-block';
-            tagElement.style.padding = '2px 8px';
-            tagElement.style.marginRight = '5px';
-            tagElement.style.marginBottom = '5px'; // Add space between tags
-            tagElement.style.borderRadius = '12px';
-            tagElement.style.backgroundColor = `${tagColors[tag] || '#000'}`;
+            tagElement.style.display = "inline-block";
+            tagElement.style.padding = "2px 8px";
+            tagElement.style.marginRight = "5px";
+            tagElement.style.marginBottom = "5px"; // Add space between tags
+            tagElement.style.borderRadius = "12px";
+            tagElement.style.backgroundColor = `${tagColors[tag] || "#000"}`;
 
             // Set text color based on background
-            const darkBackgroundTags = ['Camera', 'Vehicles', 'Architecture', 'Urbanism', 'Trekker', 'Language', 'Miscellaneous', 'Markers', 'Bollards', 'Vegetation', 'Stickers', 'Soil', 'Flags', 'Brands'];
+            const darkBackgroundTags = ["Camera", "Vehicles", "Architecture", "Urbanism", "Trekker", "Language", "Miscellaneous", "Markers", "Bollards", "Vegetation", "Stickers", "Soil", "Flags", "Brands"];
             if (darkBackgroundTags.includes(tag)) {
-                tagElement.style.color = 'white';
+                tagElement.style.color = "white";
             } else {
-                tagElement.style.color = '#000000';
+                tagElement.style.color = "#000000";
             }
 
             tagsContainer.appendChild(tagElement);
@@ -756,10 +794,10 @@ function runScript(GEF) {
 
     // Helper functions: content
     function createContentElement(meta) {
-        let contentElement = document.createElement('p'); // Use p to contain formatted content
+        let contentElement = document.createElement("p"); // Use p to contain formatted content
         if (window.revealInfoInput && window.revealInfoInput.checked) {
             // Reveal mode: show original content
-            contentElement.innerHTML = formatContent(meta.content.replace(/[\{\}]/g, ''));
+            contentElement.innerHTML = formatContent(meta.content.replace(/[\{\}]/g, ""));
         } else {
             // Hide mode: replace text within curly brackets with a single line
             contentElement.innerHTML = formatContent(meta.content.replace(/\{([^}]*)\}/g, match =>
@@ -772,12 +810,12 @@ function runScript(GEF) {
     function createNoteElement(meta) {
         if (!meta.note) return null;
 
-        let noteElement = document.createElement('p'); // Use p to contain formatted note
-        noteElement.style.color = 'lightgray'; // Make Notes golden
-        noteElement.style.fontSize = '10px';
+        let noteElement = document.createElement("p"); // Use p to contain formatted note
+        noteElement.style.color = "lightgray"; // Make Notes golden
+        noteElement.style.fontSize = "10px";
         if (window.revealInfoInput && window.revealInfoInput.checked) {
             // Reveal mode: show original note
-            noteElement.innerHTML = formatContent(meta.note.replace(/[\{\}]/g, ''), true);
+            noteElement.innerHTML = formatContent(meta.note.replace(/[\{\}]/g, ""), true);
         } else {
             // Hide mode: replace text within curly brackets with a single line
             noteElement.innerHTML = formatContent(meta.note.replace(/\{([^}]*)\}/g, match =>
@@ -790,30 +828,30 @@ function runScript(GEF) {
     function createImageElement(meta) {
         if (!meta.image) return null;
 
-        let imageElement = document.createElement('img');
+        let imageElement = document.createElement("img");
         imageElement.src = meta.image;
-        imageElement.style.maxWidth = '100%';
-        imageElement.style.marginTop = '5px';
-        imageElement.style.cursor = 'pointer';
+        imageElement.style.maxWidth = "100%";
+        imageElement.style.marginTop = "5px";
+        imageElement.style.cursor = "pointer";
 
         // Add instruction text below the image
-        let instructionText = document.createElement('p');
-        instructionText.textContent = 'Click on the image to enlarge it';
-        instructionText.style.fontSize = '10px';
-        instructionText.style.color = 'lightgray';
-        instructionText.style.textAlign = 'center';
+        let instructionText = document.createElement("p");
+        instructionText.textContent = "Click on the image to enlarge it";
+        instructionText.style.fontSize = "10px";
+        instructionText.style.color = "lightgray";
+        instructionText.style.textAlign = "center";
 
         if (window.revealInfoInput && window.revealInfoInput.checked) {
             // Reveal mode: show images
-            imageElement.style.display = 'block';
-            instructionText.style.display = 'block';
+            imageElement.style.display = "block";
+            instructionText.style.display = "block";
         } else {
             // Hide mode: hide images
-            imageElement.style.display = 'none';
-            instructionText.style.display = 'none';
+            imageElement.style.display = "none";
+            instructionText.style.display = "none";
         }
 
-        imageElement.addEventListener('click', (event) => {
+        imageElement.addEventListener("click", (event) => {
             event.stopPropagation();
             openModal(meta.image);
         });
@@ -825,11 +863,11 @@ function runScript(GEF) {
     function createCreditsElement(meta) {
         if (!meta.country || !window.revealInfoInput || !window.revealInfoInput.checked) return null;
 
-        let creditsElement = document.createElement('p');
-        creditsElement.style.color = 'white'; // Style for credits
-        let countries = meta.country.split(', ');
+        let creditsElement = document.createElement("p");
+        creditsElement.style.color = "white"; // Style for credits
+        let countries = meta.country.split(", ");
 
-        let creditsContent = 'Learn more about ';
+        let creditsContent = "Learn more about ";
         countries.forEach((country, index) => {
             let countryInfo = countryData[country];
             if (countryInfo) {
@@ -841,10 +879,10 @@ function runScript(GEF) {
                 creditsContent += `<b>${country}</b>`;
             }
             if (index < countries.length - 1) {
-                creditsContent += ' and ';
+                creditsContent += " and ";
             }
         });
-        creditsContent += ' on PlonkIt!';
+        creditsContent += " on PlonkIt!";
         creditsElement.innerHTML = `<i>${creditsContent}</i>`;
         return creditsElement;
     }
@@ -852,9 +890,9 @@ function runScript(GEF) {
     // Display an individual meta
     function showMeta(index) {
         window.currentIndex = index; // Update the global currentIndex
-        const metasElements = document.querySelectorAll('.meta-container');
-        metasElements.forEach((el, i) => el.style.display = (i === index) ? 'block' : 'none');
-        const carouselCounter = document.getElementById('carouselCounter');
+        const metasElements = document.querySelectorAll(".meta-container");
+        metasElements.forEach((el, i) => el.style.display = (i === index) ? "block" : "none");
+        const carouselCounter = document.getElementById("carouselCounter");
         if (carouselCounter) {
             carouselCounter.textContent = `${index + 1}/${metasElements.length}`;
         }
@@ -864,41 +902,41 @@ function runScript(GEF) {
     function showMetasByLevel(level, resetIndex = true) {
         window.currentLevel = level; // Set the current level
         const metas = window.currentMetas.filter(meta => meta.level === level);
-        const metaContent = document.getElementById('meta-content');
-        const initialMessage = document.getElementById('initial-message');
-        const carouselControls = document.getElementById('carousel-controls');
+        const metaContent = document.getElementById("meta-content");
+        const initialMessage = document.getElementById("initial-message");
+        const carouselControls = document.getElementById("carousel-controls");
 
         if (metas.length === 0) {
             metaContent.innerHTML = `<p><i>No tips found at the ${level.toLowerCase()} level.</i></p>`;
-            metaContent.style.fontSize = '12px';
-            metaContent.style.textAlign = 'center';
-            carouselControls.style.display = 'none'; // Hide carousel controls
+            metaContent.style.fontSize = "12px";
+            metaContent.style.textAlign = "center";
+            carouselControls.style.display = "none"; // Hide carousel controls
         } else {
             metaContent.innerHTML = metas.map((meta, index) => {
                 let creditsElement = createCreditsElement(meta);
                 let imageElements = createImageElement(meta);
                 return `
-                    <section class="meta-container" style="display: ${index === 0 ? 'block' : 'none'};">
+                    <section class="meta-container" style="display: ${index === 0 ? "block" : "none"};">
                         <div style="margin-bottom: 10px; font-size: 12px;">
                             ${createTagElements(meta).outerHTML}
                             ${createContentElement(meta).outerHTML}
-                            ${meta.note ? createNoteElement(meta).outerHTML : ''}
-                            ${imageElements ? imageElements.imageElement.outerHTML + imageElements.instructionText.outerHTML : ''}
-                            ${creditsElement ? creditsElement.outerHTML : ''}
+                            ${meta.note ? createNoteElement(meta).outerHTML : ""}
+                            ${imageElements ? imageElements.imageElement.outerHTML + imageElements.instructionText.outerHTML : ""}
+                            ${creditsElement ? creditsElement.outerHTML : ""}
                         </div>
                     </section>
                 `;
-            }).join('');
-            metaContent.style.textAlign = 'left';
-            carouselControls.style.display = 'block'; // Show carousel controls
+            }).join("");
+            metaContent.style.textAlign = "left";
+            carouselControls.style.display = "block"; // Show carousel controls
         }
 
-        initialMessage.style.display = 'none';
-        metaContent.style.display = 'block';
+        initialMessage.style.display = "none";
+        metaContent.style.display = "block";
 
         // Update tab styles
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(`tab-${level.toLowerCase()}`).classList.add('active');
+        document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+        document.getElementById(`tab-${level.toLowerCase()}`).classList.add("active");
 
         // Reset carousel index when switching tabs, unless specified otherwise
         if (resetIndex) {
@@ -909,9 +947,9 @@ function runScript(GEF) {
         showMeta(window.currentIndex);
 
         // Add carousel functionality to cycle through metas
-        const prevButton = document.getElementById('prevButton');
-        const nextButton = document.getElementById('nextButton');
-        const carouselCounter = document.getElementById('carouselCounter');
+        const prevButton = document.getElementById("prevButton");
+        const nextButton = document.getElementById("nextButton");
+        const carouselCounter = document.getElementById("carouselCounter");
 
         if (prevButton && nextButton && carouselCounter) {
             prevButton.onclick = () => {
@@ -934,7 +972,7 @@ function runScript(GEF) {
             if (imageElements) {
                 let imageElement = document.querySelector(`.meta-container:nth-child(${index + 1}) img`);
                 if (imageElement) {
-                    imageElement.addEventListener('click', (event) => {
+                    imageElement.addEventListener("click", (event) => {
                         event.stopPropagation();
                         console.log("Image clicked, opening modal");
                         openModal(meta.image);
@@ -964,22 +1002,22 @@ function runScript(GEF) {
             if (errorDisplayed) {
                 return; // Skip refreshing metas if an error message is displayed
             }
-            window.hintsContent.innerHTML = ''; // Clear only the content area
+            window.hintsContent.innerHTML = ""; // Clear only the content area
         }
 
-        window.hintsContent.style.display = 'block'; // Change from flex to block for normal flow
-        window.hintsContent.style.textAlign = 'left'; // Align text to the left
+        window.hintsContent.style.display = "block"; // Change from flex to block for normal flow
+        window.hintsContent.style.textAlign = "left"; // Align text to the left
 
         // Extract unique tags
         let uniqueTags = new Set();
         metas.forEach(meta => {
             if (meta.type) {
-                meta.type.split(', ').forEach(tag => uniqueTags.add(tag));
+                meta.type.split(", ").forEach(tag => uniqueTags.add(tag));
             }
         });
 
         // Create a temporary meta object to use createTagElements
-        let tempMeta = { type: Array.from(uniqueTags).join(', ') };
+        let tempMeta = { type: Array.from(uniqueTags).join(", ") };
         let tagsContainer = createTagElements(tempMeta);
 
         // Display initial message
@@ -1009,12 +1047,12 @@ function runScript(GEF) {
         window.currentMetas = metas;
 
         // Add event listeners to tabs
-        document.getElementById('tab-continent').addEventListener('click', () => toggleMetasByLevel('Continent'));
-        document.getElementById('tab-country').addEventListener('click', () => toggleMetasByLevel('Country'));
-        document.getElementById('tab-region').addEventListener('click', () => toggleMetasByLevel('Region'));
+        document.getElementById("tab-continent").addEventListener("click", () => toggleMetasByLevel("Continent"));
+        document.getElementById("tab-country").addEventListener("click", () => toggleMetasByLevel("Country"));
+        document.getElementById("tab-region").addEventListener("click", () => toggleMetasByLevel("Region"));
 
         // Add CSS for hover effects and active tab highlighting
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.innerHTML = `
             .tab {
                 transition: background-color 0.3s, color 0.3s;
@@ -1055,30 +1093,30 @@ function runScript(GEF) {
 
     // Picture enlargement
     function openModal(imageSrc) {
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImage');
-        const closeBtn = document.querySelector('.close');
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.querySelector(".close");
 
-        modal.style.display = 'flex'; // Set display to flex when showing the modal
+        modal.style.display = "flex"; // Set display to flex when showing the modal
         modalImg.src = imageSrc;
 
         // Add instruction text for closing the modal
-        let instructionText = document.getElementById('modalInstructionText');
+        let instructionText = document.getElementById("modalInstructionText");
         if (!instructionText) {
-            instructionText = document.createElement('div');
-            instructionText.id = 'modalInstructionText';
-            instructionText.textContent = 'Click anywhere outside the image or on the "X" to close';
-            instructionText.style.position = 'absolute';
-            instructionText.style.bottom = '20px';
-            instructionText.style.width = '100%';
-            instructionText.style.textAlign = 'center';
-            instructionText.style.color = 'white';
-            instructionText.style.fontSize = '14px';
+            instructionText = document.createElement("div");
+            instructionText.id = "modalInstructionText";
+            instructionText.textContent = "Click anywhere outside the image or on the 'X' to close";
+            instructionText.style.position = "absolute";
+            instructionText.style.bottom = "20px";
+            instructionText.style.width = "100%";
+            instructionText.style.textAlign = "center";
+            instructionText.style.color = "white";
+            instructionText.style.fontSize = "14px";
             modal.appendChild(instructionText);
         }
 
         function closeModal() {
-            modal.style.display = 'none';
+            modal.style.display = "none";
             if (instructionText) {
                 instructionText.remove(); // Remove instruction text when closing
             }
@@ -1093,7 +1131,7 @@ function runScript(GEF) {
         };
 
         // Close the modal if the hints container is clicked
-        window.hintsContainer.addEventListener('click', closeModal);
+        window.hintsContainer.addEventListener("click", closeModal);
     }
 
     // Change the background color of the hints container
@@ -1102,17 +1140,17 @@ function runScript(GEF) {
         if (!hintsContainer) return;
 
         switch (level) {
-            case 'Continent':
-                hintsContainer.style.backgroundColor = 'rgba(8, 24, 35, 0.7)'; // Light blue tinge
+            case "Continent":
+                hintsContainer.style.backgroundColor = "rgba(8, 24, 35, 0.7)"; // Light blue tinge
                 break;
-            case 'Country':
-                hintsContainer.style.backgroundColor = 'rgba(37, 35, 8, 0.7)'; // Light yellow tinge
+            case "Country":
+                hintsContainer.style.backgroundColor = "rgba(37, 35, 8, 0.7)"; // Light yellow tinge
                 break;
-            case 'Region':
-                hintsContainer.style.backgroundColor = 'rgba(38, 8, 8, 0.7)'; // Light red tinge
+            case "Region":
+                hintsContainer.style.backgroundColor = "rgba(38, 8, 8, 0.7)"; // Light red tinge
                 break;
             default:
-                hintsContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Default background color
+                hintsContainer.style.backgroundColor = "rgba(0, 0, 0, 0.7)"; // Default background color
                 break;
         }
     }
@@ -1129,17 +1167,16 @@ function runScript(GEF) {
 
     // Initialize UI
     setupHintsUI();
-    checkMap(GEF);
+    observeUrlChange(GEF);
     injectCSS(flagiconsUrl);
 
     // Start observing round and URL changes
     observeRoundChange(GEF);
-    
-    // Observe changes in the URL
-    const urlObserver = new MutationObserver(() => {
-        checkMap(GEF);
-    });
-
-    // Start observing changes in the URL
-    urlObserver.observe(document.body, { childList: true, subtree: true });
+    observeUrlChange((url, GEF) => {
+        if (url.includes("/game/")) {
+            checkMap(GEF);
+        } else {
+            hideUI();
+        }
+    }, GEF);
 }
