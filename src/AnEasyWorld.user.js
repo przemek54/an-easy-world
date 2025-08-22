@@ -22,7 +22,7 @@
 // URLs for Google Sheets
 const locationsSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=0&single=true&output=tsv';
 const metasSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv';
-const flagiconsUrl = 'https://cdn.jsdelivr.net/gh/przemek54/flag-icons@7.2.3/css/flag-icons.min.css';
+const flagiconsUrl = 'https://cdn.jsdelivr.net/gh/przemek54/flag-icons@v0.1.3/css/flag-icons.min.css';
 const countryDataUrl = 'https://przemek54.github.io/an-easy-world/data/country-data.json';
 
 // Run
