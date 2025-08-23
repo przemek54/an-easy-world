@@ -52,12 +52,12 @@ function runScript(GEF) {
     // Detect URL changes
     function observeUrlChange(callback, GEF) {
         if (typeof callback !== "function") {
-            console.warn("Callback is not a function! If you have just launched or refreshed the webpage, feel free to ignore it.", callback);
+            console.warn("[AEW] Callback is not a function! If you have just launched or refreshed the webpage, feel free to ignore it.", callback);
             return;
         }
 
         if (!GEF || !GEF.events) {
-            console.warn("observeUrlChange: GEF is not initialized.");
+            console.warn("[AEW] observeUrlChange: GEF is not initialized.");
             return;
         }
 
@@ -478,10 +478,10 @@ function runScript(GEF) {
             const mapId = GEF.state.map.id;
         
             if (allowedMapIDs.has(mapId)) {
-                console.log("Compatible map! Running script...");
+                console.log("[AEW] Compatible map! Running script...");
                 showUI();
             } else {
-                console.log("Incompatible map.");
+                console.log("[AEW] Incompatible map.");
                 hideUI();
                 }
             }, 1000); // short delay
@@ -647,7 +647,7 @@ function runScript(GEF) {
                     if (matchingLocations.length > 1) {
                         displayError("Multiple matching locations found.");
                     } else if (closestLocation) {
-                        console.log(`Closest location (${closestLocation[0]}) found at distance: ${smallestDistance} km`);
+                        console.log(`[AEW] Closest location (${closestLocation[0]}) found at distance: ${smallestDistance} km`);
                         let metaIds = closestLocation[3] ? closestLocation[3].split(", ") : [];
                         if (metaIds.length > 0) {
                             fetchMetas(metaIds);
@@ -690,7 +690,7 @@ function runScript(GEF) {
                                 content: row[3],
                                 note: row[4],
                                 image: row[6],
-                                country: row[9], // Add country information
+                                country: row[9],
                             });
                         }
                     });
@@ -699,7 +699,7 @@ function runScript(GEF) {
                 displayMetas(metasToDisplay);
             },
             onerror: function(error) {
-                console.error("Error fetching metas:", error);
+                console.error("[AEW] Error fetching metas:", error);
             }
         });
     }
@@ -726,7 +726,7 @@ function runScript(GEF) {
             changeHintsContainerBackground(null);
             window.hintsContent.style.display = "block";
             window.hintsContent.style.textAlign = "center";
-            window.hintsContent.style.height = "100%"; // Ensure the container takes full height
+            window.hintsContent.style.height = "100%";
             window.hintsContent.innerHTML = `<b><i>LOADING...</i></b>`;
         }
         window.currentIndex = 0; // Reset the global currentIndex
@@ -778,8 +778,8 @@ function runScript(GEF) {
         if (!meta.type) return null;
 
         let tagsContainer = document.createElement("div");
-        tagsContainer.style.textAlign = "center"; // Center the tags
-        tagsContainer.style.lineHeight = "1.5"; // Increase line spacing within the tags
+        tagsContainer.style.textAlign = "center";
+        tagsContainer.style.lineHeight = "1.5";
 
         let tags = meta.type.split(", ");
         tags.forEach(tag => {
@@ -788,7 +788,7 @@ function runScript(GEF) {
             tagElement.style.display = "inline-block";
             tagElement.style.padding = "2px 8px";
             tagElement.style.marginRight = "5px";
-            tagElement.style.marginBottom = "5px"; // Add space between tags
+            tagElement.style.marginBottom = "5px";
             tagElement.style.borderRadius = "12px";
             tagElement.style.backgroundColor = `${tagColors[tag] || "#000"}`;
 
@@ -808,7 +808,7 @@ function runScript(GEF) {
 
     // Helper functions: content
     function createContentElement(meta) {
-        let contentElement = document.createElement("p"); // Use p to contain formatted content
+        let contentElement = document.createElement("p");
         if (window.revealInfoInput && window.revealInfoInput.checked) {
             // Reveal mode: show original content
             contentElement.innerHTML = formatContent(meta.content.replace(/[\{\}]/g, ""));
@@ -988,7 +988,6 @@ function runScript(GEF) {
                 if (imageElement) {
                     imageElement.addEventListener("click", (event) => {
                         event.stopPropagation();
-                        console.log("Image clicked, opening modal");
                         openModal(meta.image);
                     });
                 }
@@ -1172,7 +1171,7 @@ function runScript(GEF) {
     //// MISCELLANEOUS
     // Global error handler
     window.onerror = function(message, source, lineno, colno, error) {
-        console.error("An error occurred:", message, "at", source, ":", lineno, ":", colno, error);
+        console.error("[AEW] An error occurred:", message, "at", source, ":", lineno, ":", colno, error);
     };
 
     //// ACTUAL ACTIONS
@@ -1188,9 +1187,11 @@ function runScript(GEF) {
     observeRoundChange(GEF);
     observeUrlChange((url, GEF) => {
         if (url.includes("/game/")) {
+            interceptGoogleMapsAPI();
             checkMap(GEF);
         } else {
             hideUI();
+            removeInterceptor();
         }
     }, GEF);
 }
