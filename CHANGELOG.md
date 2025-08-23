@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file. This change
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-23-08
+### Added
+- New flags for Alaska, Hawaii, Azores and Madeira.
+- Combined flag for Israel and Palestine.
+
+### Changed
+- Merge Israel and Palestine in the country database.
+- Interceptor now triggers whenever a round begins, rather than running continously in the background.
+- Switch from map names to map IDs as compatibility verification.
+- Give console errors and messages an \[AEW\] tag.
+
+### Fixed
+- Fix an issue where certain panoramas couldn't have their coordinates fetched.
+- Make tracking URL changes (to enable/disable the script) lighter and more reliable.
+- Interceptor disables completely when not playing compatible maps.
+
 ## [0.1.2] - 2025-29-01
 ### Changed
 - AEW icon is now an .ico file.
