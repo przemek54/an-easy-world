@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      0.2.0
+// @version      0.2.1
 // @description  Display tips on An Easy World
 // @author       54
 // @match        https://www.geoguessr.com/*
