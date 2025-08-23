@@ -45,7 +45,8 @@ function runScript(GEF) {
     };
     let countryData = {};
     let errorDisplayed = false; // Global flag to indicate if an error message is displayed
-    let isHintsButtonVisible = false; // Flag to track the visibility state of the hintsButton
+    let isHintsButtonVisible = false; // Hints button visibility flag
+    let interceptorActive = false; // Interceptor flag
 
     //// INITIALIZING / HIDING
     // Detect URL changes
@@ -523,16 +524,28 @@ function runScript(GEF) {
 
     //// TASK ROUTINE EVERY ROUND
     // Intercept the API call to get coordinates from Google Maps
+    let originalOpen = null;
     function interceptGoogleMapsAPI() {
-        var originalOpen = XMLHttpRequest.prototype.open;
-        let urlIntercepted = false;
+        if (interceptorActive) return; // Prevent multiple interceptors
+        interceptorActive = true;
+        originalOpen = XMLHttpRequest.prototype.open;
+
+        let coordinatesFound = false;
+        let timeoutId = setTimeout(() => {
+            if (!coordinatesFound) {
+                displayError("Couldn't get location. Try refreshing the page.");
+                removeInterceptor();
+            }
+        }, 5000);
+
         XMLHttpRequest.prototype.open = function(method, url) {
-            if (method.toUpperCase() === "POST" &&
-                (url.startsWith("https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/GetMetadata") ||
-                 url.startsWith("https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/SingleImageSearch"))) {
-
-                urlIntercepted = true; // Mark that the expected URL has been intercepted
-
+            if (
+                method.toUpperCase() === "POST" &&
+                (
+                    url.includes("MapsJsInternalService/GetMetadata") ||
+                    url.includes("MapsJsInternalService/SingleImageSearch")
+                )
+            ) {
                 this.addEventListener("load", function () {
                     try {
                         let interceptedResult = this.responseText;
@@ -543,33 +556,33 @@ function runScript(GEF) {
                             let split = match[0].split(",");
                             globalCoordinates.lat = Number.parseFloat(split[0]);
                             globalCoordinates.lng = Number.parseFloat(split[1]);
-
-                            // Check if coordinates are (0, 0)
                             if (globalCoordinates.lat === 0 && globalCoordinates.lng === 0) {
-                                displayError("Coordinates are (0, 0), indicating an error in fetching.");
+                                displayError("Coordinates are (0, 0). Likely an error.");
+                                removeInterceptor();
+                                clearTimeout(timeoutId);
                                 return;
                             }
-
-                            // Once the coordinates are intercepted, fetch the location data from the spreadsheet
+                            coordinatesFound = true;
                             fetchSheetsData(globalCoordinates);
-                        } else {
-                            throw new Error("Coordinates not found in the intercepted response.");
+                            removeInterceptor();
+                            clearTimeout(timeoutId);
                         }
                     } catch (error) {
-                        console.error("Error fetching coordinates:", error);
                         displayError("Error fetching coordinates. Try refreshing the page.");
+                        removeInterceptor();
+                        clearTimeout(timeoutId);
                     }
                 });
             }
             return originalOpen.apply(this, arguments);
         };
+    }
 
-        // Set a timeout to display an error if the expected URL isn't intercepted within 5 seconds
-        setTimeout(() => {
-            if (!urlIntercepted) {
-                displayError("Couldn't get location. Try refreshing the page.");
-            }
-        }, 5000);
+    function removeInterceptor() {
+        if (interceptorActive && originalOpen) {
+            XMLHttpRequest.prototype.open = originalOpen;
+            interceptorActive = false;
+        }
     }
 
     // Display errors if location can't be found
@@ -591,7 +604,7 @@ function runScript(GEF) {
             return;
         }
 
-        // Declare timeoutId in the correct scope
+        // Declare timeoutId
         const timeoutId = setTimeout(() => {
             displayError("Location fetching timed out. Please try again.");
         }, 5000); // 5 seconds timeout
@@ -697,12 +710,13 @@ function runScript(GEF) {
         return lines.map(line => line.split("\t"));
     }
 
-    // Detect when the round is over
+    // Detect when a new round begins
     function observeRoundChange(GEF) {
         // Event listener for round start
         GEF.events.addEventListener("round_start", (event) => {
-            resetHintsContent(); // Reset hints content when a new round starts
+            resetHintsContent();
             errorDisplayed = false; // Reset the error flag
+            interceptGoogleMapsAPI();
         });
     }
 
@@ -938,7 +952,7 @@ function runScript(GEF) {
         document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
         document.getElementById(`tab-${level.toLowerCase()}`).classList.add("active");
 
-        // Reset carousel index when switching tabs, unless specified otherwise
+        // Reset carousel index when switching tabs
         if (resetIndex) {
             window.currentIndex = 0;
         }
