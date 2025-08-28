@@ -219,6 +219,10 @@
         "code": "tw",
         "url": "https://www.plonkit.net/taiwan"
     },
+    "Thailand": {
+        "code": "th",
+        "url": "https://www.plonkit.net/thailand"
+    },
     "Turkey": {
         "code": "tr",
         "url": "https://www.plonkit.net/turkey"
@@ -262,6 +266,10 @@
     "Croatia": {
         "code": "hr",
         "url": "https://www.plonkit.net/croatia"
+    },
+    "Cyprus": {
+        "code": "cy",
+        "url": "https://www.plonkit.net/cyprus"
     },
     "Czechia": {
         "code": "cz",
