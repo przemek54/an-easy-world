@@ -27,229 +27,89 @@
         "code": "",
         "url": "https://www.plonkit.net/guide#6"
     },
-    "Botswana": {
-        "code": "bw",
-        "url": "https://www.plonkit.net/botswana"
+    "Afghanistan": {
+        "code": "af",
+        "url": ""
     },
-    "Egypt": {
-        "code": "eg",
-        "url": "https://www.plonkit.net/egypt"
-    },
-    "Eswatini": {
-        "code": "sz",
-        "url": "https://www.plonkit.net/eswatini"
-    },
-    "Ghana": {
-        "code": "gh",
-        "url": "https://www.plonkit.net/ghana"
-    },
-    "Kenya": {
-        "code": "ke",
-        "url": "https://www.plonkit.net/kenya"
-    },
-    "Lesotho": {
-        "code": "ls",
-        "url": "https://www.plonkit.net/lesotho"
-    },
-    "Madagascar": {
-        "code": "mg",
-        "url": "https://www.plonkit.net/madagascar"
-    },
-    "Mali": {
-        "code": "ml",
-        "url": "https://www.plonkit.net/mali"
-    },
-    "Namibia" : {
-        "code": "na",
-        "url": "https://www.plonkit.net/namibia"
-    },
-    "Nigeria": {
-        "code": "ng",
-        "url": "https://www.plonkit.net/nigeria"
-    },
-    "Réunion": {
-        "code": "re",
-        "url": "https://www.plonkit.net/reunion"
-    },
-    "Rwanda": {
-        "code": "rw",
-        "url": "https://www.plonkit.net/rwanda"
-    },
-    "São Tomé and Príncipe": {
-        "code": "st",
-        "url": "https://www.plonkit.net/sao-tome-and-principe"
-    },
-    "Senegal": {
-        "code": "sn",
-        "url": "https://www.plonkit.net/senegal"
-    },
-    "South Africa": {
-        "code": "za",
-        "url": "https://www.plonkit.net/south-africa"
-    },
-    "Tanzania": {
-        "code": "tz",
-        "url": "https://www.plonkit.net/tanzania"
-    },
-    "Tunisia": {
-        "code": "tn",
-        "url": "https://www.plonkit.net/tunisia"
-    },
-    "Uganda": {
-        "code": "ug",
-        "url": "https://www.plonkit.net/uganda"
-    },
-    "Antarctica": {
-        "code": "aq",
-        "url": "https://www.plonkit.net/antarctica"
-    },
-    "South Georgia and the South Sandwich Islands": {
-        "code": "gs",
-        "url": "https://www.plonkit.net/south-georgia-sandwich-islands"
-    },
-    "Bangladesh": {
-        "code": "bd",
-        "url": "https://www.plonkit.net/bangladesh"
-    },
-    "Bhutan": {
-        "code": "bt",
-        "url": "https://www.plonkit.net/bhutan"
-    },
-    "British Indian Ocean Territory": {
-        "code": "io",
-        "url": "https://www.plonkit.net/british-indian-ocean-territory"
-    },
-    "Cambodia": {
-        "code": "kh",
-        "url": "https://www.plonkit.net/cambodia"
-    },
-    "China": {
-        "code": "cn",
-        "url": "https://www.plonkit.net/china"
-    },
-    "Hong Kong": {
-        "code": "hk",
-        "url": "https://www.plonkit.net/hong-kong"
-    },
-    "India": {
-        "code": "in",
-        "url": "https://www.plonkit.net/india"
-    },
-    "Indonesia": {
-        "code": "id",
-        "url": "https://www.plonkit.net/indonesia"
-    },
-    "Iraq": {
-        "code": "iq",
-        "url": "https://www.plonkit.net/iraq"
-    },
-    "Israel and Palestine": {
-        "code": "ip",
-        "url": "https://www.plonkit.net/israel-west-bank"
-    },
-    "Japan": {
-        "code": "jp",
-        "url": "https://www.plonkit.net/japan"
-    },
-    "Jordan": {
-        "code": "jo",
-        "url": "https://www.plonkit.net/jordan"
-    },
-    "Kazakhstan": {
-        "code": "kz",
-        "url": "https://www.plonkit.net/kazakhstan"
-    },
-    "Kyrgyzstan": {
-        "code": "kg",
-        "url": "https://www.plonkit.net/kyrgyzstan"
-    },
-    "Laos": {
-        "code": "la",
-        "url": "https://www.plonkit.net/laos"
-    },
-    "Lebanon": {
-        "code": "lb",
-        "url": "https://www.plonkit.net/lebanon"
-    },
-    "Macau": {
-        "code": "mo",
-        "url": "https://www.plonkit.net/macau"
-    },
-    "Malaysia": {
-        "code": "my",
-        "url": "https://www.plonkit.net/malaysia"
-    },
-    "Mongolia": {
-        "code": "mn",
-        "url": "https://www.plonkit.net/mongolia"
-    },
-    "Nepal": {
-        "code": "np",
-        "url": "https://www.plonkit.net/nepal"
-    },
-    "Oman": {
-        "code": "om",
-        "url": "https://www.plonkit.net/oman"
-    },
-    "Pakistan": {
-        "code": "pk",
-        "url": "https://www.plonkit.net/pakistan"
-    },
-    "Philippines": {
-        "code": "ph",
-        "url": "https://www.plonkit.net/philippines"
-    },
-    "Qatar": {
-        "code": "qa",
-        "url": "https://www.plonkit.net/qatar"
-    },
-    "Singapore": {
-        "code": "sg",
-        "url": "https://www.plonkit.net/singapore"
-    },
-    "South Korea": {
-        "code": "kr",
-        "url": "https://www.plonkit.net/south-korea"
-    },
-    "Sri Lanka": {
-        "code": "lk",
-        "url": "https://www.plonkit.net/sri-lanka"
-    },
-    "Taiwan": {
-        "code": "tw",
-        "url": "https://www.plonkit.net/taiwan"
-    },
-    "Thailand": {
-        "code": "th",
-        "url": "https://www.plonkit.net/thailand"
-    },
-    "Turkey": {
-        "code": "tr",
-        "url": "https://www.plonkit.net/turkey"
-    },
-    "United Arab Emirates": {
-        "code": "ae",
-        "url": "https://www.plonkit.net/united-arab-emirates"
-    },
-    "Vietnam": {
-        "code": "vn",
-        "url": "https://www.plonkit.net/vietnam"
+    "Alaska": {
+        "code": "ak",
+        "url": "https://www.plonkit.net/alaska"
     },
     "Albania": {
         "code": "al",
         "url": "https://www.plonkit.net/albania"
     },
+    "Algeria": {
+        "code": "dz",
+        "url": ""
+    },
+    "American Samoa": {
+        "code": "as",
+        "url": "https://www.plonkit.net/american-samoa"
+    },
     "Andorra": {
         "code": "ad",
         "url": "https://www.plonkit.net/andorra"
+    },
+    "Angola": {
+        "code": "ao",
+        "url": ""
+    },
+    "Anguilla": {
+        "code": "ai",
+        "url": ""
+    },
+    "Antarctica": {
+        "code": "aq",
+        "url": "https://www.plonkit.net/antarctica"
+    },
+    "Antigua and Barbuda": {
+        "code": "ag",
+        "url": ""
+    },
+    "Argentina": {
+        "code": "ar",
+        "url": "https://www.plonkit.net/argentina"
+    },
+    "Armenia": {
+        "code": "am",
+        "url": ""
+    },
+    "Aruba": {
+        "code": "aw",
+        "url": ""
+    },
+    "Australia": {
+        "code": "au",
+        "url": "https://www.plonkit.net/australia"
     },
     "Austria": {
         "code": "at",
         "url": "https://www.plonkit.net/austria"
     },
+    "Azerbaijan": {
+        "code": "az",
+        "url": ""
+    },
     "Azores": {
         "code": "ac",
         "url": "https://www.plonkit.net/azores"
+    },
+    "Bahamas": {
+        "code": "bs",
+        "url": ""
+    },
+    "Bahrain": {
+        "code": "bh",
+        "url": ""
+    },
+    "Bangladesh": {
+        "code": "bd",
+        "url": "https://www.plonkit.net/bangladesh"
+    },
+    "Barbados": {
+        "code": "bb",
+        "url": ""
     },
     "Belarus": {
         "code": "by",
@@ -259,13 +119,141 @@
         "code": "be",
         "url": "https://www.plonkit.net/belgium"
     },
+    "Belize": {
+        "code": "bz",
+        "url": ""
+    },
+    "Benin": {
+        "code": "bj",
+        "url": ""
+    },
+    "Bermuda": {
+        "code": "bm",
+        "url": "https://www.plonkit.net/bermuda"
+    },
+    "Bhutan": {
+        "code": "bt",
+        "url": "https://www.plonkit.net/bhutan"
+    },
+    "Bolivia": {
+        "code": "bo",
+        "url": "https://www.plonkit.net/bolivia"
+    },
+    "Bonaire, Sint Eustatius and Saba": {
+        "code": "bq",
+        "url": ""
+    },
+    "Bosnia and Herzegovina": {
+        "code": "ba",
+        "url": ""
+    },
+    "Botswana": {
+        "code": "bw",
+        "url": "https://www.plonkit.net/botswana"
+    },
+    "Bouvet Island": {
+        "code": "bv",
+        "url": ""
+    },
+    "Brazil": {
+        "code": "br",
+        "url": "https://www.plonkit.net/brazil"
+    },
+    "British Indian Ocean Territory": {
+        "code": "io",
+        "url": "https://www.plonkit.net/british-indian-ocean-territory"
+    },
+    "British Virgin Islands": {
+        "code": "vg",
+        "url": ""
+    },
+    "Brunei": {
+        "code": "bn",
+        "url": ""
+    },
     "Bulgaria": {
         "code": "bg",
         "url": "https://www.plonkit.net/bulgaria"
     },
+    "Burkina Faso": {
+        "code": "bf",
+        "url": ""
+    },
+    "Burundi": {
+        "code": "bi",
+        "url": ""
+    },
+    "Cabo Verde": {
+        "code": "cv",
+        "url": ""
+    },
+    "Cambodia": {
+        "code": "kh",
+        "url": "https://www.plonkit.net/cambodia"
+    },
+    "Cameroon": {
+        "code": "cm",
+        "url": ""
+    },
+    "Canada": {
+        "code": "ca",
+        "url": "https://www.plonkit.net/canada"
+    },
+    "Cayman Islands": {
+        "code": "ky",
+        "url": ""
+    },
+    "Central African Republic": {
+        "code": "cf",
+        "url": ""
+    },
+    "Chad": {
+        "code": "td",
+        "url": ""
+    },
+    "Chile": {
+        "code": "cl",
+        "url": "https://www.plonkit.net/chile"
+    },
+    "China": {
+        "code": "cn",
+        "url": "https://www.plonkit.net/china"
+    },
+    "Christmas Island": {
+        "code": "cx",
+        "url": "https://www.plonkit.net/christmas-island"
+    },
+    "Cocos Islands": {
+        "code": "cc",
+        "url": "https://www.plonkit.net/cocos-islands"
+    },
+    "Colombia": {
+        "code": "co",
+        "url": "https://www.plonkit.net/colombia"
+    },
+    "Comoros": {
+        "code": "km",
+        "url": ""
+    },
+    "Cook Islands": {
+        "code": "ck",
+        "url": ""
+    },
+    "Costa Rica": {
+        "code": "cr",
+        "url": "https://www.plonkit.net/costa-rica"
+    },
     "Croatia": {
         "code": "hr",
         "url": "https://www.plonkit.net/croatia"
+    },
+    "Cuba": {
+        "code": "cu",
+        "url": ""
+    },
+    "Curaçao": {
+        "code": "cw",
+        "url": "https://www.plonkit.net/curacao"
     },
     "Cyprus": {
         "code": "cy",
@@ -275,17 +263,73 @@
         "code": "cz",
         "url": "https://www.plonkit.net/czechia"
     },
+    "Côte d'Ivoire": {
+        "code": "ci",
+        "url": ""
+    },
+    "Democratic Republic of the Congo": {
+        "code": "cd",
+        "url": ""
+    },
     "Denmark": {
         "code": "dk",
         "url": "https://www.plonkit.net/denmark"
+    },
+    "Djibouti": {
+        "code": "dj",
+        "url": ""
+    },
+    "Dominica": {
+        "code": "dm",
+        "url": ""
+    },
+    "Dominican Republic": {
+        "code": "do",
+        "url": "https://www.plonkit.net/dominican-republic"
+    },
+    "Ecuador": {
+        "code": "ec",
+        "url": "https://www.plonkit.net/ecuador"
+    },
+    "Egypt": {
+        "code": "eg",
+        "url": "https://www.plonkit.net/egypt"
+    },
+    "El Salvador": {
+        "code": "sv",
+        "url": ""
+    },
+    "Equatorial Guinea": {
+        "code": "gq",
+        "url": ""
+    },
+    "Eritrea": {
+        "code": "er",
+        "url": ""
     },
     "Estonia": {
         "code": "ee",
         "url": "https://www.plonkit.net/estonia"
     },
+    "Eswatini": {
+        "code": "sz",
+        "url": "https://www.plonkit.net/eswatini"
+    },
+    "Ethiopia": {
+        "code": "et",
+        "url": ""
+    },
+    "Falkland Islands": {
+        "code": "fk",
+        "url": "https://www.plonkit.net/falkland-islands"
+    },
     "Faroe Islands": {
         "code": "fo",
         "url": "https://www.plonkit.net/faroe-islands"
+    },
+    "Fiji": {
+        "code": "fj",
+        "url": ""
     },
     "Finland": {
         "code": "fi",
@@ -295,9 +339,37 @@
         "code": "fr",
         "url": "https://www.plonkit.net/france"
     },
+    "French Guiana": {
+        "code": "gf",
+        "url": ""
+    },
+    "French Polynesia": {
+        "code": "pf",
+        "url": ""
+    },
+    "French Southern Territories": {
+        "code": "tf",
+        "url": ""
+    },
+    "Gabon": {
+        "code": "ga",
+        "url": ""
+    },
+    "Gambia": {
+        "code": "gm",
+        "url": ""
+    },
+    "Georgia": {
+        "code": "ge",
+        "url": ""
+    },
     "Germany": {
         "code": "de",
         "url": "https://www.plonkit.net/germany"
+    },
+    "Ghana": {
+        "code": "gh",
+        "url": "https://www.plonkit.net/ghana"
     },
     "Gibraltar": {
         "code": "gi",
@@ -307,6 +379,62 @@
         "code": "gr",
         "url": "https://www.plonkit.net/greece"
     },
+    "Greenland": {
+        "code": "gl",
+        "url": "https://www.plonkit.net/greenland"
+    },
+    "Grenada": {
+        "code": "gd",
+        "url": ""
+    },
+    "Guadeloupe": {
+        "code": "gp",
+        "url": ""
+    },
+    "Guam": {
+        "code": "gu",
+        "url": "https://www.plonkit.net/guam"
+    },
+    "Guatemala": {
+        "code": "gt",
+        "url": "https://www.plonkit.net/guatemala"
+    },
+    "Guernsey": {
+        "code": "gg",
+        "url": ""
+    },
+    "Guinea": {
+        "code": "gn",
+        "url": ""
+    },
+    "Guinea-Bissau": {
+        "code": "gw",
+        "url": ""
+    },
+    "Guyana": {
+        "code": "gy",
+        "url": ""
+    },
+    "Haiti": {
+        "code": "ht",
+        "url": ""
+    },
+    "Hawaii": {
+        "code": "hi",
+        "url": "https://www.plonkit.net/hawaii"
+    },
+    "Heard Island and McDonald Islands": {
+        "code": "hm",
+        "url": ""
+    },
+    "Honduras": {
+        "code": "hn",
+        "url": ""
+    },
+    "Hong Kong": {
+        "code": "hk",
+        "url": "https://www.plonkit.net/hong-kong"
+    },
     "Hungary": {
         "code": "hu",
         "url": "https://www.plonkit.net/hungary"
@@ -315,25 +443,97 @@
         "code": "is",
         "url": "https://www.plonkit.net/iceland"
     },
+    "India": {
+        "code": "in",
+        "url": "https://www.plonkit.net/india"
+    },
+    "Indonesia": {
+        "code": "id",
+        "url": "https://www.plonkit.net/indonesia"
+    },
+    "Iran": {
+        "code": "ir",
+        "url": ""
+    },
+    "Iraq": {
+        "code": "iq",
+        "url": "https://www.plonkit.net/iraq"
+    },
     "Ireland": {
         "code": "ie",
         "url": "https://www.plonkit.net/ireland"
-    },
-    "Italy": {
-        "code": "it",
-        "url": "https://www.plonkit.net/italy"
     },
     "Isle of Man": {
         "code": "im",
         "url": "https://www.plonkit.net/isle-of-man"
     },
+    "Israel and Palestine": {
+        "code": "ip",
+        "url": "https://www.plonkit.net/israel-west-bank"
+    },
+    "Italy": {
+        "code": "it",
+        "url": "https://www.plonkit.net/italy"
+    },
+    "Jamaica": {
+        "code": "jm",
+        "url": ""
+    },
+    "Japan": {
+        "code": "jp",
+        "url": "https://www.plonkit.net/japan"
+    },
     "Jersey": {
         "code": "je",
         "url": "https://www.plonkit.net/jersey"
     },
+    "Jordan": {
+        "code": "jo",
+        "url": "https://www.plonkit.net/jordan"
+    },
+    "Kazakhstan": {
+        "code": "kz",
+        "url": "https://www.plonkit.net/kazakhstan"
+    },
+    "Kenya": {
+        "code": "ke",
+        "url": "https://www.plonkit.net/kenya"
+    },
+    "Kiribati": {
+        "code": "ki",
+        "url": ""
+    },
+    "Kuwait": {
+        "code": "kw",
+        "url": ""
+    },
+    "Kyrgyzstan": {
+        "code": "kg",
+        "url": "https://www.plonkit.net/kyrgyzstan"
+    },
+    "Laos": {
+        "code": "la",
+        "url": "https://www.plonkit.net/laos"
+    },
     "Latvia": {
         "code": "lv",
         "url": "https://www.plonkit.net/latvia"
+    },
+    "Lebanon": {
+        "code": "lb",
+        "url": "https://www.plonkit.net/lebanon"
+    },
+    "Lesotho": {
+        "code": "ls",
+        "url": "https://www.plonkit.net/lesotho"
+    },
+    "Liberia": {
+        "code": "lr",
+        "url": ""
+    },
+    "Libya": {
+        "code": "ly",
+        "url": ""
     },
     "Liechtenstein": {
         "code": "li",
@@ -347,33 +547,193 @@
         "code": "lu",
         "url": "https://www.plonkit.net/luxembourg"
     },
+    "Macau": {
+        "code": "mo",
+        "url": "https://www.plonkit.net/macau"
+    },
+    "Madagascar": {
+        "code": "mg",
+        "url": "https://www.plonkit.net/madagascar"
+    },
     "Madeira": {
         "code": "mi",
         "url": "https://www.plonkit.net/madeira"
+    },
+    "Malawi": {
+        "code": "mw",
+        "url": ""
+    },
+    "Malaysia": {
+        "code": "my",
+        "url": "https://www.plonkit.net/malaysia"
+    },
+    "Maldives": {
+        "code": "mv",
+        "url": ""
+    },
+    "Mali": {
+        "code": "ml",
+        "url": "https://www.plonkit.net/mali"
     },
     "Malta": {
         "code": "mt",
         "url": "https://www.plonkit.net/malta"
     },
+    "Marshall Islands": {
+        "code": "mh",
+        "url": ""
+    },
+    "Martinique": {
+        "code": "mq",
+        "url": "https://www.plonkit.net/martinique"
+    },
+    "Mauritania": {
+        "code": "mr",
+        "url": ""
+    },
+    "Mauritius": {
+        "code": "mu",
+        "url": ""
+    },
+    "Mayotte": {
+        "code": "yt",
+        "url": ""
+    },
+    "Mexico": {
+        "code": "mx",
+        "url": "https://www.plonkit.net/mexico"
+    },
+    "Micronesia": {
+        "code": "fm",
+        "url": ""
+    },
+    "Moldova": {
+        "code": "md",
+        "url": ""
+    },
     "Monaco": {
         "code": "mc",
         "url": "https://www.plonkit.net/monaco"
+    },
+    "Mongolia": {
+        "code": "mn",
+        "url": "https://www.plonkit.net/mongolia"
     },
     "Montenegro": {
         "code": "me",
         "url": "https://www.plonkit.net/montenegro"
     },
+    "Montserrat": {
+        "code": "ms",
+        "url": ""
+    },
+    "Morocco": {
+        "code": "ma",
+        "url": ""
+    },
+    "Mozambique": {
+        "code": "mz",
+        "url": ""
+    },
+    "Myanmar": {
+        "code": "mm",
+        "url": ""
+    },
+    "Namibia": {
+        "code": "na",
+        "url": "https://www.plonkit.net/namibia"
+    },
+    "Nauru": {
+        "code": "nr",
+        "url": ""
+    },
+    "Nepal": {
+        "code": "np",
+        "url": "https://www.plonkit.net/nepal"
+    },
     "Netherlands": {
         "code": "nl",
         "url": "https://www.plonkit.net/netherlands"
+    },
+    "New Caledonia": {
+        "code": "nc",
+        "url": ""
+    },
+    "New Zealand": {
+        "code": "nz",
+        "url": "https://www.plonkit.net/new-zealand"
+    },
+    "Nicaragua": {
+        "code": "ni",
+        "url": ""
+    },
+    "Niger": {
+        "code": "ne",
+        "url": ""
+    },
+    "Nigeria": {
+        "code": "ng",
+        "url": "https://www.plonkit.net/nigeria"
+    },
+    "Niue": {
+        "code": "nu",
+        "url": ""
+    },
+    "Norfolk Island": {
+        "code": "nf",
+        "url": ""
+    },
+    "North Korea": {
+        "code": "kp",
+        "url": ""
     },
     "North Macedonia": {
         "code": "mk",
         "url": "https://www.plonkit.net/north-macedonia"
     },
+    "Northern Mariana Islands": {
+        "code": "mp",
+        "url": "https://www.plonkit.net/northern-mariana-islands"
+    },
     "Norway": {
         "code": "no",
         "url": "https://www.plonkit.net/norway"
+    },
+    "Oman": {
+        "code": "om",
+        "url": "https://www.plonkit.net/oman"
+    },
+    "Pakistan": {
+        "code": "pk",
+        "url": "https://www.plonkit.net/pakistan"
+    },
+    "Palau": {
+        "code": "pw",
+        "url": ""
+    },
+    "Panama": {
+        "code": "pa",
+        "url": "https://www.plonkit.net/panama"
+    },
+    "Papua New Guinea": {
+        "code": "pg",
+        "url": ""
+    },
+    "Paraguay": {
+        "code": "py",
+        "url": ""
+    },
+    "Peru": {
+        "code": "pe",
+        "url": "https://www.plonkit.net/peru"
+    },
+    "Philippines": {
+        "code": "ph",
+        "url": "https://www.plonkit.net/philippines"
+    },
+    "Pitcairn Islands": {
+        "code": "pn",
+        "url": "https://www.plonkit.net/pitcairn-islands"
     },
     "Poland": {
         "code": "pl",
@@ -383,6 +743,18 @@
         "code": "pt",
         "url": "https://www.plonkit.net/portugal"
     },
+    "Puerto Rico": {
+        "code": "pr",
+        "url": "https://www.plonkit.net/puerto-rico"
+    },
+    "Qatar": {
+        "code": "qa",
+        "url": "https://www.plonkit.net/qatar"
+    },
+    "Republic of the Congo": {
+        "code": "cg",
+        "url": ""
+    },
     "Romania": {
         "code": "ro",
         "url": "https://www.plonkit.net/romania"
@@ -391,13 +763,77 @@
         "code": "ru",
         "url": "https://www.plonkit.net/russia"
     },
+    "Rwanda": {
+        "code": "rw",
+        "url": "https://www.plonkit.net/rwanda"
+    },
+    "Réunion": {
+        "code": "re",
+        "url": "https://www.plonkit.net/reunion"
+    },
+    "Saint Barthélemy": {
+        "code": "bl",
+        "url": ""
+    },
+    "Saint Helena, Ascension and Tristan da Cunha": {
+        "code": "sh",
+        "url": ""
+    },
+    "Saint Kitts and Nevis": {
+        "code": "kn",
+        "url": ""
+    },
+    "Saint Lucia": {
+        "code": "lc",
+        "url": ""
+    },
+    "Saint Martin": {
+        "code": "mf",
+        "url": ""
+    },
+    "Saint Pierre and Miquelon": {
+        "code": "pm",
+        "url": "https://www.plonkit.net/saint-pierre-miquelon"
+    },
+    "Saint Vincent and the Grenadines": {
+        "code": "vc",
+        "url": ""
+    },
+    "Samoa": {
+        "code": "ws",
+        "url": ""
+    },
     "San Marino": {
         "code": "sm",
         "url": "https://www.plonkit.net/san-marino"
     },
+    "Saudi Arabia": {
+        "code": "sa",
+        "url": ""
+    },
+    "Senegal": {
+        "code": "sn",
+        "url": "https://www.plonkit.net/senegal"
+    },
     "Serbia": {
         "code": "rs",
         "url": "https://www.plonkit.net/serbia"
+    },
+    "Seychelles": {
+        "code": "sc",
+        "url": ""
+    },
+    "Sierra Leone": {
+        "code": "sl",
+        "url": ""
+    },
+    "Singapore": {
+        "code": "sg",
+        "url": "https://www.plonkit.net/singapore"
+    },
+    "Sint Maarten": {
+        "code": "sx",
+        "url": ""
     },
     "Slovakia": {
         "code": "sk",
@@ -407,9 +843,45 @@
         "code": "si",
         "url": "https://www.plonkit.net/slovenia"
     },
+    "Solomon Islands": {
+        "code": "sb",
+        "url": ""
+    },
+    "Somalia": {
+        "code": "so",
+        "url": ""
+    },
+    "South Africa": {
+        "code": "za",
+        "url": "https://www.plonkit.net/south-africa"
+    },
+    "South Georgia and the South Sandwich Islands": {
+        "code": "gs",
+        "url": "https://www.plonkit.net/south-georgia-sandwich-islands"
+    },
+    "South Korea": {
+        "code": "kr",
+        "url": "https://www.plonkit.net/south-korea"
+    },
+    "South Sudan": {
+        "code": "ss",
+        "url": ""
+    },
     "Spain": {
         "code": "es",
         "url": "https://www.plonkit.net/spain"
+    },
+    "Sri Lanka": {
+        "code": "lk",
+        "url": "https://www.plonkit.net/sri-lanka"
+    },
+    "Sudan": {
+        "code": "sd",
+        "url": ""
+    },
+    "Suriname": {
+        "code": "sr",
+        "url": ""
     },
     "Svalbard": {
         "code": "no",
@@ -423,69 +895,69 @@
         "code": "ch",
         "url": "https://www.plonkit.net/switzerland"
     },
-    "Ukraine": {
-        "code": "ua",
-        "url": "https://www.plonkit.net/ukraine"
+    "Syria": {
+        "code": "sy",
+        "url": ""
     },
-    "United Kingdom": {
-        "code": "gb",
-        "url": "https://www.plonkit.net/united-kingdom"
+    "São Tomé and Príncipe": {
+        "code": "st",
+        "url": "https://www.plonkit.net/sao-tome-and-principe"
     },
-    "Alaska": {
-        "code": "ak",
-        "url": "https://www.plonkit.net/alaska"
+    "Taiwan": {
+        "code": "tw",
+        "url": "https://www.plonkit.net/taiwan"
     },
-    "Bermuda": {
-        "code": "bm",
-        "url": "https://www.plonkit.net/bermuda"
+    "Tajikistan": {
+        "code": "tj",
+        "url": ""
     },
-    "Canada": {
-        "code": "ca",
-        "url": "https://www.plonkit.net/canada"
+    "Tanzania": {
+        "code": "tz",
+        "url": "https://www.plonkit.net/tanzania"
     },
-    "Costa Rica": {
-        "code": "cr",
-        "url": "https://www.plonkit.net/costa-rica"
+    "Thailand": {
+        "code": "th",
+        "url": "https://www.plonkit.net/thailand"
     },
-    "Dominican Republic": {
-        "code": "do",
-        "url": "https://www.plonkit.net/dominican-republic"
+    "Timor-Leste": {
+        "code": "tl",
+        "url": ""
     },
-    "Greenland": {
-        "code": "gl",
-        "url": "https://www.plonkit.net/greenland"
+    "Togo": {
+        "code": "tg",
+        "url": ""
     },
-    "Guatemala": {
-        "code": "gt",
-        "url": "https://www.plonkit.net/guatemala"
+    "Tokelau": {
+        "code": "tk",
+        "url": ""
     },
-    "Hawaii": {
-        "code": "hi",
-        "url": "https://www.plonkit.net/hawaii"
+    "Tonga": {
+        "code": "to",
+        "url": ""
     },
-    "Martinique": {
-        "code": "mq",
-        "url": "https://www.plonkit.net/martinique"
+    "Trinidad and Tobago": {
+        "code": "tt",
+        "url": ""
     },
-    "Mexico": {
-        "code": "mx",
-        "url": "https://www.plonkit.net/mexico"
+    "Tunisia": {
+        "code": "tn",
+        "url": "https://www.plonkit.net/tunisia"
     },
-    "Panama": {
-        "code": "pa",
-        "url": "https://www.plonkit.net/panama"
+    "Turkey": {
+        "code": "tr",
+        "url": "https://www.plonkit.net/turkey"
     },
-    "Puerto Rico": {
-        "code": "pr",
-        "url": "https://www.plonkit.net/puerto-rico"
+    "Turkmenistan": {
+        "code": "tm",
+        "url": ""
     },
-    "Saint Pierre and Miquelon": {
-        "code": "pm",
-        "url": "https://www.plonkit.net/saint-pierre-miquelon"
+    "Turks and Caicos Islands": {
+        "code": "tc",
+        "url": ""
     },
-    "United States": {
-        "code": "us",
-        "url": "https://www.plonkit.net/united-states"
+    "Tuvalu": {
+        "code": "tv",
+        "url": ""
     },
     "US Minor Outlying Islands": {
         "code": "um",
@@ -495,80 +967,72 @@
         "code": "vi",
         "url": "https://www.plonkit.net/us-virgin-islands"
     },
-    "American Samoa": {
-        "code": "as",
-        "url": "https://www.plonkit.net/american-samoa"
+    "Uganda": {
+        "code": "ug",
+        "url": "https://www.plonkit.net/uganda"
     },
-    "Australia": {
-        "code": "au",
-        "url": "https://www.plonkit.net/australia"
+    "Ukraine": {
+        "code": "ua",
+        "url": "https://www.plonkit.net/ukraine"
     },
-    "Christmas Island": {
-        "code": "cx",
-        "url": "https://www.plonkit.net/christmas-island"
+    "United Arab Emirates": {
+        "code": "ae",
+        "url": "https://www.plonkit.net/united-arab-emirates"
     },
-    "Cocos Islands": {
-        "code": "cc",
-        "url": "https://www.plonkit.net/cocos-islands"
+    "United Kingdom": {
+        "code": "gb",
+        "url": "https://www.plonkit.net/united-kingdom"
     },
-    "Guam": {
-        "code": "gu",
-        "url": "https://www.plonkit.net/guam"
+    "United States": {
+        "code": "us",
+        "url": "https://www.plonkit.net/united-states"
     },
-    "New Zealand": {
-        "code": "nz",
-        "url": "https://www.plonkit.net/new-zealand"
+    "Uruguay": {
+        "code": "uy",
+        "url": "https://www.plonkit.net/uruguay"
     },
-    "Northern Mariana Islands": {
-        "code": "mp",
-        "url": "https://www.plonkit.net/northern-mariana-islands"
-    },
-    "Pitcairn Islands": {
-        "code": "pn",
-        "url": "https://www.plonkit.net/pitcairn-islands"
+    "Uzbekistan": {
+        "code": "uz",
+        "url": ""
     },
     "Vanuatu": {
         "code": "vu",
         "url": "https://www.plonkit.net/vanuatu"
     },
-    "Argentina": {
-        "code": "ar",
-        "url": "https://www.plonkit.net/argentina"
+    "Vatican": {
+        "code": "va",
+        "url": ""
     },
-    "Bolivia": {
-        "code": "bo",
-        "url": "https://www.plonkit.net/bolivia"
+    "Venezuela": {
+        "code": "ve",
+        "url": ""
     },
-    "Brazil": {
-        "code": "br",
-        "url": "https://www.plonkit.net/brazil"
+    "Vietnam": {
+        "code": "vn",
+        "url": "https://www.plonkit.net/vietnam"
     },
-    "Chile": {
-        "code": "cl",
-        "url": "https://www.plonkit.net/chile"
+    "Wallis and Futuna": {
+        "code": "wf",
+        "url": ""
     },
-    "Colombia": {
-        "code": "co",
-        "url": "https://www.plonkit.net/colombia"
+    "Western Sahara": {
+        "code": "eh",
+        "url": ""
     },
-    "Curaçao": {
-        "code": "cw",
-        "url": "https://www.plonkit.net/curacao"
+    "Yemen": {
+        "code": "ye",
+        "url": ""
     },
-    "Ecuador": {
-        "code": "ec",
-        "url": "https://www.plonkit.net/ecuador"
+    "Zambia": {
+        "code": "zm",
+        "url": ""
     },
-    "Falkland Islands": {
-        "code": "fk",
-        "url": "https://www.plonkit.net/falkland-islands"
+    "Zimbabwe": {
+        "code": "zw",
+        "url": ""
     },
-    "Peru": {
-        "code": "pe",
-        "url": "https://www.plonkit.net/peru"
-    },
-    "Uruguay": {
-        "code": "uy",
-        "url": "https://www.plonkit.net/uruguay"
+    "Åland Islands": {
+        "code": "ax",
+        "url": ""
     }
 }
