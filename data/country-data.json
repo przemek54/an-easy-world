@@ -223,7 +223,7 @@
         "code": "cx",
         "url": "https://www.plonkit.net/christmas-island"
     },
-    "Cocos Islands": {
+    "Cocos (Keeling) Islands": {
         "code": "cc",
         "url": "https://www.plonkit.net/cocos-islands"
     },
@@ -501,6 +501,10 @@
     },
     "Kiribati": {
         "code": "ki",
+        "url": ""
+    },
+    "Kosovo": {
+        "code": "xk",
         "url": ""
     },
     "Kuwait": {
