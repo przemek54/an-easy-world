@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         An Easy World: Tips
 // @namespace    https://www.geoguessr.com
-// @version      0.2.1
+// @version      0.2.2
 // @description  Display tips on An Easy World
 // @author       54
 // @match        https://www.geoguessr.com/*
@@ -22,7 +22,7 @@
 // URLs for Google Sheets
 const locationsSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=0&single=true&output=tsv";
 const metasSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQclsDyN6aq9eY0SYyKI4X66wXWT1eB5tfMgdBsTIKfI97QE4N9u-GOFY5u9T_tWgp2MvlaIPskmKnJ/pub?gid=581949462&single=true&output=tsv";
-const flagiconsUrl = "https://cdn.jsdelivr.net/gh/przemek54/flag-icons@v0.1.4/css/flag-icons.min.css";
+const flagiconsUrl = "https://cdn.jsdelivr.net/gh/przemek54/flag-icons@v0.1.5/css/flag-icons.min.css";
 const countryDataUrl = "https://przemek54.github.io/an-easy-world/data/country-data.json";
 
 // Map IDs
@@ -887,7 +887,10 @@ function runScript(GEF) {
             if (countryInfo) {
                 creditsContent += `<font color="#42aaf5"><a href="${countryInfo.url}" target="_blank"><b>${country}</b></a></font>`;
                 if (countryInfo.code) {
-                    creditsContent += `<span class="fi fi-${countryInfo.code}" style="vertical-align: 0.25px; margin-right: 4px; margin-left: 4px"></span>`;
+                    const countryFlags = countryInfo.code.split("-");
+                    countryFlags.forEach(flag => {
+                        creditsContent += `<span class="fi fi-${flag}" style="vertical-align: 0.25px; margin-right: 4px; margin-left: 4px"></span>`;
+                    });
                 }
             } else {
                 creditsContent += `<b>${country}</b>`;
